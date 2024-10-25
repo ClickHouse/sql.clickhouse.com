@@ -8,9 +8,11 @@ Users can raise UI issues in this repository and suggest example queries.
 
 ## What is the Playground?
 
-The [Playground](https://sql.clickhouse.com) powers the example you see when reading the ClickHouse (documentation)[https://clickhouse.com/docs] or (blogs)[https://clickhouse.com/blog]. 
+The [Playground](https://sql.clickhouse.com) powers the example you see when reading the ClickHouse [documentation](https://clickhouse.com/docs) or [blogs](https://clickhouse.com/blog). 
 
 Each time you see in the blogs a widget showing a SQL query with the ![Pen icon](./images/pen.png) icon, you can click on it to open the Playground where you can run the query or build a simple visualization.
+
+![Widget](./images/widget.png)
 
 ## Contributing example queries
 
