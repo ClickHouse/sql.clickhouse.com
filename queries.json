@@ -2745,6 +2745,77 @@
         },
         "format": false,
         "params": []
-      }
+      },
+      {
+		"id": "4MGH76GE6QN6WA6H8TCYKR",
+		"name": "Top 10 busiest stations in 2018",
+		"group": "mta",
+		"comment": "",
+		"query": "SELECT station, sum(entries_change) as total_entries, formatReadableQuantity(total_entries) as total_entries_read\nFROM mta.subway_transits_2014_2022_v2\nWHERE toYear(date_time) = '2018'\nGROUP BY station \nORDER BY sum(entries_change) DESC\nLIMIT 10",
+		"chart": {
+		  "type": "bar",
+		  "config": {
+			"xaxis": "station",
+			"yaxis": "total_entries",
+			"series": "station",
+			"stack": true
+		  }
+		},
+		"format": false,
+		"params": []
+	  },
+	  {
+		"id": "KADCUSBZG3UWVV2N4QUJXW",
+		"name": "Change in traffic over the years for busiest station",
+		"group": "mta",
+		"comment": "",
+		"query": "SELECT\n  station,\n  toYear(date_time) as year,\n  sum(entries_change) as total_entries\nFROM\n  mta.subway_transits_2014_2022_v2\nWHERE\n  station IN (\n    SELECT station FROM mta.subway_transits_2014_2022_v2 GROUP BY station ORDER BY sum(entries_change) DESC LIMIT 10\n  )\nGROUP BY\n  year,\n  station\nORDER BY\n  year\n",
+		"chart": {
+		  "type": "line",
+		  "config": {
+			"xaxis": "year",
+			"yaxis": "total_entries",
+			"series": "station",
+			"stack": false
+		  }
+		},
+		"format": false,
+		"params": []
+	  },
+	  {
+		"id": "STHDUVXOFZFGF2JCHJGB5Y",
+		"name": "Traffic comparison weekdays versus weekend",
+		"group": "mta",
+		"comment": "",
+		"query": "SELECT\n    toStartOfWeek(transit_timestamp) as week,\n    'weekday' as period,\n    sum(ridership) AS total\nFROM mta.transit_data WHERE toDayOfWeek(transit_timestamp) <= 5\nGROUP BY week ORDER BY week ASC\nUNION ALL\nSELECT\n    toStartOfWeek(transit_timestamp) as week,\n    'weekend' as period,\n    sum(ridership) AS total\nFROM mta.transit_data WHERE toDayOfWeek(transit_timestamp) > 5\nGROUP BY week ORDER BY week ASC",
+		"chart": {
+		  "type": "line",
+		  "config": {
+			"xaxis": "week",
+			"yaxis": "total",
+			"series": "period"
+		  }
+		},
+		"format": false,
+		"params": []
+	  },
+	  {
+		"id": "HPN5AHXEHK1NM2NB9S3AV2",
+		"name": "Average hourly traffic by hour of the day",
+		"group": "mta",
+		"comment": "",
+		"query": "SELECT\n    station_complex, toHour(hour_of_day) as hour, avg(total_entries):: UInt64 AS avg_entries\nFROM\n(\n    SELECT\n        toStartOfHour(transit_timestamp) AS hour_of_day,\n        station_complex,\n        sum(ridership) AS total_entries\n    FROM mta.transit_data WHERE toDayOfWeek(transit_timestamp) <= 5\n    GROUP BY\n        station_complex,\n        hour_of_day\n)\nGROUP BY hour, station_complex ORDER BY hour ASC, avg_entries DESC LIMIT 3 BY hour",
+		"chart": {
+		  "type": "bar",
+		  "config": {
+			"xaxis": "hour",
+			"yaxis": "avg_entries",
+			"series": "station_complex",
+			"stack": true
+		  }
+		},
+		"format": false,
+		"params": []
+	  }
     ]
   }
