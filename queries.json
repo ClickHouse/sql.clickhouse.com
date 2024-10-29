@@ -2816,6 +2816,18 @@
 		},
 		"format": false,
 		"params": []
-	  }
+	  },
+      {
+        "id": "7VVBISZSVYWTAWR8LUDSTE",
+        "name": "All tweets from a specific user",
+        "group": "twitter",
+        "comment": "",
+        "query": "SELECT created_at, text FROM twitter.twitter WHERE tupleElement(user, 'screen_name') = 'elonmusk' ORDER BY created_at",
+        "chart": {
+          "type": "line"
+        },
+        "format": false,
+        "params": []
+      }
     ]
   }

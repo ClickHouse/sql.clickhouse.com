@@ -1,0 +1,585 @@
+{
+    "tables": [
+        {
+            "database": "amazon",
+            "table": "amazon_reviews",
+            "comment": "Table contains customer reviews of Amazon products. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/amazon-reviews"
+        },
+        {
+            "database": "country",
+            "table": "countries"
+        },
+        {
+            "database": "country",
+            "table": "country_codes"
+        },
+        {
+            "database": "country",
+            "table": "country_iso_codes"
+        },
+        {
+            "database": "country",
+            "table": "country_polygons"
+        },
+        {
+            "database": "covid",
+            "table": "covid19",
+            "comment": "Table contains covid epidemiological data from COVID-19 Open-Data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/covid19"
+        },
+        {
+            "database": "dns",
+            "table": "dns"
+        },
+        {
+            "database": "environmental",
+            "table": "sensors",
+            "comment": "Table contains sensors data from Sensor.Community, a contributors-driven global sensor network that creates Open Environmental Data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/environmental-sensors"
+        },
+        {
+            "database": "food",
+            "table": "dish"
+        },
+        {
+            "database": "food",
+            "table": "food_facts"
+        },
+        {
+            "database": "food",
+            "table": "menu",
+            "comment": "Dataset contains historical data on the menus of hotels. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/menus"
+        },
+        {
+            "database": "food",
+            "table": "menu_item",
+            "comment": "Dataset contains historical data on the menus of hotels. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/menus"
+
+        },
+        {
+            "database": "food",
+            "table": "menu_item_denorm",
+            "comment": "Dataset contains historical data on the menus of hotels. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/menus"
+
+        },
+        {
+            "database": "food",
+            "table": "menu_page",
+            "comment": "Dataset contains historical data on the menus of hotels. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/menus"
+
+        },
+        {
+            "database": "food",
+            "table": "recipes",
+            "comment": "Dataset from RecipeNLG containing 2.2 millions recipes. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/recipes"
+        },
+        {
+            "database": "forex",
+            "table": "forex"
+        },
+        {
+            "database": "forex",
+            "table": "forex_2020s"
+        },
+        {
+            "database": "forex",
+            "table": "forex_offset"
+        },
+        {
+            "database": "forex",
+            "table": "forex_usd"
+        },
+        {
+            "database": "forex",
+            "table": "forex_v2"
+        },
+        {
+            "database": "geo",
+            "table": "cell_towers",
+            "comment": "Table contains cell towers record from OpenCelliD - The world's largest Open Database of Cell Towers. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/cell-towers"
+        },
+        {
+            "database": "geo",
+            "table": "moscow"
+        },
+        {
+            "database": "git",
+            "table": "clickhouse_commits",
+            "comment": "Table contains Git commit events from Clickhouse repository. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/github"
+        },
+        {
+            "database": "git",
+            "table": "clickhouse_file_changes",
+            "comment": "Table contains Git file changes events from Clickhouse repository. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/github"
+        },
+        {
+            "database": "git",
+            "table": "clickhouse_line_changes",
+            "comment": "Table contains Git line changes events from Clickhouse repository. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/github"
+        },
+        {
+            "database": "git",
+            "table": "github_events",
+            "comment": "Dataset contains all events on GitHub from 2011 to Dec 6 2020. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/github-events"
+        },
+        {
+            "database": "git",
+            "table": "grafana_commits",
+            "comment": "Table contains Git commits events from Grafana repository. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/github"
+        },
+        {
+            "database": "git",
+            "table": "grafana_file_changes",
+            "comment": "Table contains Git file changes events from Grafana repository. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/github"
+        },
+        {
+            "database": "git",
+            "table": "grafana_line_changes",
+            "comment": "Table contains Git line changes events from Grafana repository. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/github"
+        },
+        {
+            "database": "hackernews",
+            "table": "hackernews"
+        },
+        {
+            "database": "hackernews",
+            "table": "hackernews_indexed"
+        },
+        {
+            "database": "imdb",
+            "table": "actors"
+        },
+        {
+            "database": "imdb",
+            "table": "actors_large"
+        },
+        {
+            "database": "imdb",
+            "table": "directors"
+        },
+        {
+            "database": "imdb",
+            "table": "genres"
+        },
+        {
+            "database": "imdb",
+            "table": "movie_directors"
+        },
+        {
+            "database": "imdb",
+            "table": "movies"
+        },
+        {
+            "database": "imdb",
+            "table": "roles"
+        },
+        {
+            "database": "imdb",
+            "table": "roles_large"
+        },
+        {
+            "database": "json",
+            "table": "test_json"
+        },
+        {
+            "database": "logs",
+            "table": "http_logs"
+        },
+        {
+            "database": "logs",
+            "table": "jsonlogs"
+        },
+        {
+            "database": "metrica",
+            "table": "hits",
+            "comment": "Dataset contains anonymized web analytics data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/metrica"
+        },
+        {
+            "database": "metrica",
+            "table": "hits_100m_compatible",
+            "comment": "Dataset contains anonymized web analytics data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/metrica"
+
+        },
+        {
+            "database": "metrica",
+            "table": "hits_100m_obfuscated",
+            "comment": "Dataset contains anonymized web analytics data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/metrica"
+
+        },
+        {
+            "database": "metrica",
+            "table": "hits_v1",
+            "comment": "Dataset contains anonymized web analytics data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/metrica"
+
+        },
+        {
+            "database": "metrica",
+            "table": "visits_v1",
+            "comment": "Dataset contains anonymized web analytics data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/metrica"
+
+        },
+        {
+            "database": "mgbench",
+            "table": "logs1",
+            "comment": "Table contains logs generated from MgBench analytical benchmark. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/brown-benchmark"
+        },
+        {
+            "database": "mgbench",
+            "table": "logs2",
+            "comment": "Table contains logs generated from MgBench analytical benchmark. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/brown-benchmark"
+        },
+        {
+            "database": "mgbench",
+            "table": "logs3",
+            "comment": "Table contains logs generated from MgBench analytical benchmark. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/brown-benchmark"
+        },
+        {
+            "database": "noaa",
+            "table": "noaa",
+            "comment": "Dataset contains weather measurements for the last 120 years. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/noaa"
+        },
+        {
+            "database": "noaa",
+            "table": "noaa_codec_optimal",
+            "comment": "Dataset contains weather measurements for the last 120 years. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/noaa"
+
+        },
+        {
+            "database": "noaa",
+            "table": "noaa_codec_v1",
+            "comment": "Dataset contains weather measurements for the last 120 years. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/noaa"
+
+        },
+        {
+            "database": "noaa",
+            "table": "noaa_codec_v2",
+            "comment": "Dataset contains weather measurements for the last 120 years. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/noaa"
+
+        },
+        {
+            "database": "noaa",
+            "table": "noaa_codec_v3",
+            "comment": "Dataset contains weather measurements for the last 120 years. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/noaa"
+
+        },
+        {
+            "database": "noaa",
+            "table": "noaa_codec_v4",
+            "comment": "Dataset contains weather measurements for the last 120 years. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/noaa"
+
+        },
+        {
+            "database": "noaa",
+            "table": "noaa_v2",
+            "comment": "Dataset contains weather measurements for the last 120 years. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/noaa"
+
+        },
+        {
+            "database": "noaa",
+            "table": "resorts",
+            "comment": "Dataset contains list of ski resorts. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/noaa"
+
+        },
+        {
+            "database": "noaa",
+            "table": "resorts_dict",
+            "comment": "Dictionary containing list of ski resort names."
+
+        },
+        {
+            "database": "noaa",
+            "table": "states",
+            "comment": "Table containing list of US States. More info here: https://clickhouse.com/blog/real-world-data-noaa-climate-data"
+        },
+        {
+            "database": "noaa",
+            "table": "stations",
+            "comment": "Dataset contains list of weather station. More info here: https://clickhouse.com/blog/real-world-data-noaa-climate-data"
+
+        },
+        {
+            "database": "noaa",
+            "table": "stations_dict",
+            "comment": "Dictionary contains list of weather station names. More info here: https://clickhouse.com/blog/real-world-data-noaa-climate-data"
+        },
+        {
+            "database": "nyc_taxi",
+            "table": "trips",
+            "comment": "Dataset containing taxi ride data in NYC from 2009. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/nyc-taxi"
+        },
+        {
+            "database": "nypd",
+            "table": "NYPD_Complaint",
+            "comment": "Dataset from NYC Open Data team containing crime data in NYC. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/nypd_complaint_data"
+        },
+        {
+            "database": "opensky",
+            "table": "opensky",
+            "comment": "Dataset contains air traffic data during the COVID-19 pandemic. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/opensky"
+        },
+        {
+            "database": "ontime",
+            "table": "ontime",
+            "comment": "Dataset contains data from Bureau of Transportation Statistics.. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/ontime"
+        },
+        {
+            "database": "random",
+            "table": "click_events"
+        },
+        {
+            "database": "random",
+            "table": "events"
+        },
+        {
+            "database": "random",
+            "table": "metrics"
+        },
+        {
+            "database": "random",
+            "table": "purchases"
+        },
+        {
+            "database": "reddit",
+            "table": "reddit",
+            "comment": "Dataset contains publicly-available comments on Reddit. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/reddit-comments"
+        },
+        {
+            "database": "stackoverflow",
+            "table": "badges",
+            "comment": "Dataset contains badge data from Stackoverflow. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/stackoverflow"
+        },
+        {
+            "database": "stackoverflow",
+            "table": "comments",
+            "comment": "Dataset contains comments data from Stackoverflow. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/stackoverflow"
+
+        },
+        {
+            "database": "stackoverflow",
+            "table": "posthistory",
+            "comment": "Dataset contains post history data from Stackoverflow. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/stackoverflow"
+
+        },
+        {
+            "database": "stackoverflow",
+            "table": "postlinks",
+            "comment": "Dataset contains post links data from Stackoverflow. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/stackoverflow"
+
+        },
+        {
+            "database": "stackoverflow",
+            "table": "posts",
+            "comment": "Dataset contains posts data from Stackoverflow. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/stackoverflow"
+
+        },
+        {
+            "database": "stackoverflow",
+            "table": "search_clickhouse_stackoverflow"
+        },
+        {
+            "database": "stackoverflow",
+            "table": "search_stackoverflow"
+        },
+        {
+            "database": "stackoverflow",
+            "table": "stackoverflow"
+        },
+        {
+            "database": "stackoverflow",
+            "table": "users",
+            "comment": "Dataset contains users data from Stackoverflow. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/stackoverflow"
+
+        },
+        {
+            "database": "stackoverflow",
+            "table": "votes",
+            "comment": "Dataset contains votes data from Stackoverflow. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/stackoverflow"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "customer_1",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+        },
+        {
+            "database": "star_schema",
+            "table": "customer_10",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "customer_100",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "customer_1000",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "lineorder_1",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "lineorder_10",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "lineorder_100",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "lineorder_1000",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "lineorder_flat_1",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "lineorder_flat_10",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "lineorder_flat_100",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "part_1",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "part_10",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "part_100",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "part_1000",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "supplier_1",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "supplier_10",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "supplier_100",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "star_schema",
+            "table": "supplier_1000",
+            "comment": "Dataset contains Star Schema Benchmark data. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/star-schema"
+
+        },
+        {
+            "database": "stock",
+            "table": "stock"
+        },
+        {
+            "database": "tw_weather",
+            "table": "tw_weather_data",
+            "comment": "Dataset contains historical meteorological observations in Taiwan measurements for the last 128 years. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/tw-weather"
+        },
+        {
+            "database": "uk",
+            "table": "uk_codes",
+            "comment": "UK property dataset. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/uk-price-paid"
+        },
+        {
+            "database": "uk",
+            "table": "uk_codes_dict",
+            "comment": "UK property dataset. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/uk-price-paid"
+
+        },
+        {
+            "database": "uk",
+            "table": "uk_postcode_to_iso",
+            "comment": "UK property dataset. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/uk-price-paid"
+
+        },
+        {
+            "database": "uk",
+            "table": "uk_price_paid",
+            "comment": "UK property dataset. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/uk-price-paid"
+
+        },
+        {
+            "database": "uk",
+            "table": "uk_price_paid_oby_town_price",
+            "comment": "UK property dataset. More info here: https://clickhouse.com/docs/en/getting-started/example-datasets/uk-price-paid"
+
+        },
+        {
+            "database": "wiki",
+            "table": "optimized_wikistat_small"
+        },
+        {
+            "database": "wiki",
+            "table": "wiki"
+        },
+        {
+            "database": "wiki",
+            "table": "wikistat"
+        },
+        {
+            "database": "wiki",
+            "table": "wikistat_small"
+        },
+        {
+            "database": "wiki",
+            "table": "wikistat_top"
+        },
+        {
+            "database": "wikistat_benchmark",
+            "table": "wikistat_totals"
+        },
+        {
+            "database": "words",
+            "table": "stop_words"
+        },
+        {
+            "database": "words",
+            "table": "tokens"
+        },
+        {
+            "database": "youtube",
+            "table": "youtube"
+        }
+    ]
+}

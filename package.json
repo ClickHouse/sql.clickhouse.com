@@ -4,7 +4,8 @@
     "description": "Scripts for Playground",
     "main": "index.js",
     "scripts": {
-      "load_queries": "tsx load_queries.ts"
+      "load_queries": "tsx load_queries.ts",
+      "load_table_comments": "tsx load_table_comments.ts"
     },
     "repository": {
       "type": "git",
