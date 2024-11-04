@@ -2837,12 +2837,12 @@
 		  "config": {
 			"xaxis": "year",
 			"yaxis": "99th_avg_temp",
-			"series": "country"
+			"series": "country",
+			"title": "Temperature by country and year"
 		  }
 		},
 		"format": false,
 		"params": []
 	  }
 	]
-  }
-  
+}
