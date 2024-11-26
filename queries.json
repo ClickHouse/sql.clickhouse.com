@@ -1070,7 +1070,7 @@
 	  },
 	  {
 		"id": "EDRZIQMQN3FPZJEU3TPMKR",
-		"name": "custom",
+		"name": "Median price change in London",
 		"group": "uk",
 		"comment": "",
 		"query": "SELECT\n        postcode1,\n        medianIf(price, toYear(date) = 2002) AS median_2002,\n        medianIf(price, toYear(date) = 2022) AS median_2022,\n        round(((median_2022 - median_2002) / median_2002) * 100) AS percent_change\nFROM uk.uk_price_paid\nWHERE town = 'LONDON'\nGROUP BY postcode1\nORDER BY percent_change DESC",
@@ -2831,7 +2831,7 @@
 		"name": "Temperature by country and year",
 		"group": "noaa",
 		"comment": "99th percentile of avg temperature by country and year",
-		"query": "SELECT\n  toStartOfYear(`date`) AS `year`,\n  quantile(0.99)(`tempAvg` / 10) AS `99th_avg_temp`,\n  dictGet(`country`.`country_iso_codes`, 'name', code) AS country\nFROM\n  `noaa`.`noaa_v2`\nWHERE\n  date > '1990-01-01'\n  AND code IN ('FR', 'UK', 'IN', 'NZ', 'SP', 'US')\nGROUP BY\n  year,\n  substring(station_id, 1, 2) AS code\nHAVING\n  99th_avg_temp > 0\nORDER BY\n  country,\n  year ASC\nLIMIT\n  100000;",
+		"query": "SELECT\n  toStartOfYear(`date`) AS `year`,\n  quantileExact(0.99)(`tempAvg` / 10) AS `99th_avg_temp`,\n  dictGet(`country`.`country_iso_codes`, 'name', code) AS country\nFROM\n  `noaa`.`noaa_v2`\nWHERE\n  date > '1990-01-01'\n  AND code IN ('FR', 'UK', 'IN', 'NZ', 'SP', 'US')\nGROUP BY\n  year,\n  substring(station_id, 1, 2) AS code\nHAVING\n  99th_avg_temp > 0\nORDER BY\n  country,\n  year ASC\nLIMIT\n  100000;",
 		"chart": {
 		  "type": "line",
 		  "config": {
@@ -2843,6 +2843,50 @@
 		},
 		"format": false,
 		"params": []
-	  }
+	  },
+    {
+      "id": "XNHZCZZOKEPJCQYJH9IJH9",
+      "name": "Recent releases",
+      "group": "pypi",
+      "comment": "",
+      "query": "--Recently released Python packages\nWITH (\n  SELECT\n    max(upload_time) AS max_date\n  FROM\n    pypi.projects\n) AS max_date\nSELECT\n  release_month as x,\n  name as y,\n  uniqExact(version) AS z\nFROM\n  pypi.projects\nWHERE\n  (name IN { packages: Array(String) })\n  AND (\n    toStartOfMonth(upload_time) > toStartOfMonth(max_date - toIntervalMonth(6))\n  )\nGROUP BY\n  name,\n  toMonth(upload_time) AS month,\n  formatDateTime(upload_time, '%b') AS release_month\nORDER BY\n  month ASC\nLIMIT\n  30",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [
+        {
+          "name": "packages",
+          "type": "Array(String)",
+          "textStartPos": 207,
+          "textEndPos": 231,
+          "value": "['boto3','urllib3','botocore','requests','setuptools']"
+        }
+      ]
+    },
+    {
+      "id": "UEZEBJHYKTWDYXQZFMUT39",
+      "name": "Top projects",
+      "group": "pypi",
+      "comment": "",
+      "query": "--Most downloaded projects\nSELECT\n  project,\n  sum(count) AS c\nFROM\n  pypi.pypi_downloads\nGROUP BY\n  project\nORDER BY\n  c DESC\nLIMIT\n  5",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
+    },
+    {
+      "id": "TZE9ISWDW4UMB3BYVVZTSA",
+      "name": "Total downloads and projects",
+      "group": "pypi",
+      "comment": "",
+      "query": "SELECT formatReadableQuantity(sum(count)) AS total, uniqExact(project) as projects FROM pypi.pypi_downloads",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
+    }
 	]
 }
