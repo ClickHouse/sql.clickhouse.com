@@ -2854,15 +2854,7 @@
         "type": "line"
       },
       "format": false,
-      "params": [
-        {
-          "name": "packages",
-          "type": "Array(String)",
-          "textStartPos": 207,
-          "textEndPos": 231,
-          "value": "['boto3','urllib3','botocore','requests','setuptools']"
-        }
-      ]
+      "params": {"packages":"['boto3','urllib3','botocore','requests','setuptools']"}
     },
     {
       "id": "UEZEBJHYKTWDYXQZFMUT39",

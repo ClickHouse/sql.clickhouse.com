@@ -31,3 +31,11 @@ Users can connect directly to the ClickHouse instance using the [ClickHouse Clie
 ```bash
 clickhouse client --host sql-clickhouse.clickhouse.com --secure --user demo --password ''
 ```
+
+## Load scripts [WIP]
+
+This [folder](./load_scripts) contains the scripts use to keep the data in the playground up to date. We rely on Google Cloud Run to execute the scripts. 
+
+Each folder contains a `Dockerfile`, a bash script to ingest the data and a `deploy.sh` script to deploy it as a Cloud Run job. Each job relies on environment variables to run that are listed in the individual folder.
+
+
