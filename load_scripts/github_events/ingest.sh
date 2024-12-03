@@ -11,7 +11,7 @@ echo "NUM_CORES: ${NUM_CORES}"
 
 if [ -z "$1" ]; then
   echo "checking for latest date..."
-  min_date=$(clickhouse-client --host ${CLICKHOUSE_HOST} --secure --password ${CLICKHOUSE_PASSWORD} --user ${CLICKHOUSE_USER} --query "SELECT max(file_time) FROM github.github_events");
+  min_date=$(clickhouse-client --host ${CLICKHOUSE_HOST} --secure --password ${CLICKHOUSE_PASSWORD} --user ${CLICKHOUSE_USER} --query "SELECT max(file_time) FROM ${TABLE_NAME}");
   if [ "$min_date" == "1970-01-01 00:00:00" ]; then min_date=$(date -d '24 hour ago' '+%Y-%m-%d %H:00:00'); fi
 else
   min_date=$1;
