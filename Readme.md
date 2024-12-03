@@ -36,6 +36,16 @@ clickhouse client --host sql-clickhouse.clickhouse.com --secure --user demo --pa
 
 This [folder](./load_scripts) contains the scripts use to keep the data in the playground up to date. We rely on Google Cloud Run to execute the scripts. 
 
-Each folder contains a `Dockerfile`, a bash script to ingest the data and a `deploy.sh` script to deploy it as a Cloud Run job. Each job relies on environment variables to run that are listed in the individual folder.
+Each folder contains a `Dockerfile`, a bash script to ingest the data and a `cloudbuild.yaml` that describe how to deploy to Cloud Run job. Each job relies on environment variables to run that are listed in the individual folder.
+
+If you interested in reproducing in your own Cloud Run instance, you can use the following command to deploy a new version. 
+
+```bash
+cd load_scripts/<dataset-name>
+# Make sure you are logged in with gcloud and the env variable PROJECT_ID is set
+gcloud builds submit --config cloudbuild.yaml .
+```
+
+This can also be used locally.
 
 
