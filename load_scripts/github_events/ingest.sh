@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# This script ingest data to Clickhouse then save the raw data to Google Cloud Storage.
+
 mkdir -p gharchive
 
 if [[ "$OSTYPE" == "darwin"* ]]; then

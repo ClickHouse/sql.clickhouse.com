@@ -1,7 +1,8 @@
 #!/bin/bash 
 
+# This script pushes data to a Google Cloud Storage bucket. ClickPipes is used to load the data into ClickHouse.
+
 COUNT=0
-MAX_MESSAGES=1000000
 OUTPUT_FILE="output.json"
 WS_URL="wss://jetstream1.us-east.bsky.network"
 
@@ -22,7 +23,7 @@ while $has_more; do
     echo "Extracted timestamp: $cursor"
 
     # Connect to WebSocket and process messages
-    websocat -Un --max-messages-rev $MAX_MESSAGES "$WS_URL/subscribe?wantedCollections=app.*&cursor=$cursor" > "$OUTPUT_FILE"
+    websocat -Un -B 196605 --max-messages-rev $MAX_MESSAGES "$WS_URL/subscribe?wantedCollections=app.*&cursor=$cursor" > "$OUTPUT_FILE"
     COUNT=$(wc -l < "$OUTPUT_FILE")
     echo "Received $COUNT messages"
     has_more=false
