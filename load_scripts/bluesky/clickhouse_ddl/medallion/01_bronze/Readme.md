@@ -17,6 +17,8 @@ PRIMARY KEY (kind, bluesky_ts)
 ORDER BY (kind, bluesky_ts, dedup_hash)
 ```
 
+# Transfer from object storage files to Bronze
+
 ##  S3Queue table
 
 ```sql
