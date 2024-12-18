@@ -2879,6 +2879,162 @@
       },
       "format": false,
       "params": []
-    }
+    },
+
+
+	{
+		"id": "51KVUJ5FGJUQV9XU13JKL3",
+		"name": "When do people use BlueSky?",
+		"group": "bluesky",
+		"comment": "",
+		"query": "SELECT event, hour_of_day, sum(count) as count\nFROM bluesky.events_per_hour_of_day\nWHERE event in ['post', 'repost', 'like']\nGROUP BY event, hour_of_day\nORDER BY hour_of_day;",
+		"chart": {
+		  "type": "bar",
+		  "config": {
+			"title": "Number of events per hour of day",
+			"xaxis": "hour_of_day",
+			"yaxis": "count",
+			"series": "event",
+			"stack": false
+		  }
+		},
+		"format": false,
+		"params": []
+	  },
+	  {
+		"id": "SH7GXXK4BYPHELXM5AHWDJ",
+		"name": "Most reposted users",
+		"group": "bluesky",
+		"comment": "",
+		"query": "SELECT\n    handle,\n    sum(reposts) AS reposts\nFROM bluesky.reposts_per_user AS rpu\nINNER JOIN bluesky.handle_per_user AS hpu ON rpu.did = hpu.did\nGROUP BY ALL\nORDER BY reposts DESC\nLIMIT 10",
+		"chart": {
+			"type": "line"
+		},
+		"format": false,
+		"params": []
+		},
+		{
+			"id": "H2CYZJDRCXCFYLPXMJVRCR",
+			"name": "Most liked users",
+			"group": "bluesky",
+			"comment": "",
+			"query": "SELECT\n    handle,\n    sum(likes) AS likes\nFROM bluesky.likes_per_user AS lpu\nINNER JOIN bluesky.handle_per_user AS hpu ON lpu.did = hpu.did\nGROUP BY ALL\nORDER BY likes DESC\nLIMIT 10",
+			"chart": {
+			  "type": "line"
+			},
+			"format": false,
+			"params": []
+		  },
+		  {
+			"id": "ATT83TXCQE8DUDCM84GB6E",
+			"name": "Most used languages",
+			"group": "bluesky",
+			"comment": "",
+			"query": "SELECT\n    language,\n    sum(posts) as posts\nFROM bluesky.posts_per_language\nGROUP BY language\nORDER BY posts DESC\nLIMIT 10;",
+			"chart": {
+			  "type": "horizontal bar",
+			  "config": {
+				"xaxis": "language",
+				"yaxis": "posts",
+				"title": "Most used languages"
+			  }
+			},
+			"format": false,
+			"params": []
+		  },
+		  {
+			"id": "BP4SSVSKXB4EJCMFHU8B6D",
+			"name": "Most reposted posts",
+			"group": "bluesky",
+			"comment": "",
+			"query": "WITH top_liked_cids AS\n(\n    SELECT\n        cid,\n        sum(reposts) AS reposts\n    FROM bluesky.reposts_per_post\n    GROUP BY cid\n    ORDER BY reposts DESC\n    LIMIT 10\n)\nSELECT\n    t1.reposts,\n    t2.text\nFROM top_liked_cids AS t1\nLEFT JOIN\n(\n    -- by exploiting its sorting key (cid),\n    -- we manually pre-filter the right join partner\n    SELECT *\n    FROM bluesky.cid_to_text\n    WHERE cid IN (SELECT cid FROM top_liked_cids)\n) AS t2 ON t1.cid = t2.cid;",
+			"chart": {
+			  "type": "line"
+			},
+			"format": false,
+			"params": []
+		  },
+		  {
+			"id": "8YAFPZQXXCGD75842UKE2W",
+			"name": "Most liked posts",
+			"group": "bluesky",
+			"comment": "",
+			"query": "WITH top_liked_cids AS\n(\n    SELECT\n        cid,\n        SUM(likes) AS likes\n    FROM bluesky.likes_per_post\n    GROUP BY cid\n    ORDER BY likes DESC\n    LIMIT 10\n)\nSELECT\n    t1.likes,\n    t2.text\nFROM top_liked_cids AS t1\nLEFT JOIN\n(\n    -- by exploiting its sorting key (cid),\n    -- we manually pre-filter the right join partner\n    SELECT *\n    FROM bluesky.cid_to_text\n    WHERE cid IN (SELECT cid FROM top_liked_cids)\n) AS t2 ON t1.cid = t2.cid;",
+			"chart": {
+			  "type": "line"
+			},
+			"format": false,
+			"params": []
+		  },
+		  {
+			"id": "7ICWGHB7HIIEWCMYFAWIAE",
+			"name": "Most liked posts about ClickHouse",
+			"group": "bluesky",
+			"comment": "",
+			"query": "WITH top_liked_cids AS\n(\n    SELECT\n        cid,\n        SUM(likes) AS likes\n    FROM bluesky.likes_per_post_about_clickhouse\n    GROUP BY cid\n    ORDER BY likes DESC\n    LIMIT 3\n)\nSELECT\n    t1.likes,\n    t2.text\nFROM top_liked_cids AS t1\nLEFT JOIN\n(\n    -- by exploiting its sorting key (cid),\n    -- we manually pre-filter the right join partner\n    SELECT *\n    FROM bluesky.cid_to_text\n    WHERE cid IN (SELECT cid FROM top_liked_cids)\n) AS t2 ON t1.cid = t2.cid;",
+			"chart": {
+			  "type": "line"
+			},
+			"format": false,
+			"params": []
+		  },
+		  {
+			"id": "RJR6SMBYEKJSSWWUXFHP1U",
+			"name": "Top event types by count",
+			"group": "bluesky",
+			"comment": "",
+			"query": "SELECT collection,\n       sum(posts) AS posts\nFROM bluesky.top_post_types\nGROUP BY collection\nORDER BY posts DESC;",
+			"chart": {
+			  "type": "horizontal bar",
+			  "config": {
+				"xaxis": "collection",
+				"yaxis": "posts",
+				"title": "Top event types by count"
+			  }
+			},
+			"format": false,
+			"params": []
+		  },
+	  {
+		"id": "5C6SW7OHKEVFLRDMED2WNB",
+		"name": "Top event types by unique users",
+		"group": "bluesky",
+		"comment": "",
+		"query": "SELECT collection,\n uniqMerge(users) AS users\nFROM bluesky.top_post_types\nGROUP BY collection\nORDER BY users DESC;",
+		"chart": {
+		  "type": "horizontal bar",
+		  "config": {
+			"xaxis": "collection",
+			"yaxis": "users",
+			"title": "Top event types by unique users"
+		  }
+		},
+		"format": false,
+		"params": []
+	  },
+	  {
+		"id": "9WMMTPMMP7TAIWO5ZGWZZE",
+		"name": "Top event types",
+		"group": "bluesky",
+		"comment": "",
+		"query": "SELECT collection,\n  sum(posts) AS posts,\n  uniqMerge(users) AS users\nFROM bluesky.top_post_types\nGROUP BY collection\nORDER BY posts DESC;",
+		"chart": {
+		  "type": "line"
+		},
+		"format": false,
+		"params": []
+	  },
+	  {
+		"id": "P2VKEOGYQVHFPA8F5IFZ2P",
+		"name": "Total events",
+		"group": "bluesky",
+		"comment": "",
+		"query": "\nSELECT count() FROM bluesky.bluesky;",
+		"chart": {
+		  "type": "line"
+		},
+		"format": false,
+		"params": []
+	  }
 	]
 }

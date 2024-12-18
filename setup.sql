@@ -1,7 +1,7 @@
 
 -- demo user
 
-CREATE SETTINGS PROFILE `demo` SETTINGS readonly = 1, add_http_cors_header = true, max_execution_time = 60., max_rows_to_read = 10000000000, max_bytes_to_read = 1000000000000, max_network_bandwidth = 25000000, max_memory_usage = 20000000000, max_bytes_before_external_group_by = 10000000000, max_result_rows = 1000, max_result_bytes = 10000000, result_overflow_mode = 'break' CHANGEABLE_IN_READONLY, read_overflow_mode = 'break' CHANGEABLE_IN_READONLY, enable_http_compression = true, use_query_cache = true, query_cache_nondeterministic_function_handling = 'save' CHANGEABLE_IN_READONLY, enable_writes_to_query_cache = false, query_cache_share_between_users = true CHANGEABLE_IN_READONLY, max_block_size = 65409 CHANGEABLE_IN_READONLY
+CREATE SETTINGS PROFILE `demo` SETTINGS readonly = 1, add_http_cors_header = true, max_execution_time = 60., max_rows_to_read = 10000000000, max_bytes_to_read = 1000000000000, max_network_bandwidth = 25000000, max_memory_usage = 20000000000, max_bytes_before_external_group_by = 10000000000, max_result_rows = 1000, max_result_bytes = 10000000, result_overflow_mode = 'break' CHANGEABLE_IN_READONLY, read_overflow_mode = 'break' CHANGEABLE_IN_READONLY, enable_http_compression = true, use_query_cache = false, max_block_size = 65409 CHANGEABLE_IN_READONLY, allow_experimental_analyzer = true CHANGEABLE_IN_READONLY TO demo_role
 
 CREATE ROLE demo_role SETTINGS PROFILE `demo`
 
