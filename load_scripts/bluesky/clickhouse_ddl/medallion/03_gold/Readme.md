@@ -316,11 +316,11 @@ ORDER BY collection;
 ```
 
 ```sql
-CREATE MATERIALIZED VIEW top_post_types_mv TO top_posts_types
+CREATE MATERIALIZED VIEW top_post_types_mv TO top_post_types
 AS 
 SELECT data.commit.collection AS collection, count() AS posts,
 	uniqState(CAST(data.did, 'String')) AS users
-FROM bluesky
+FROM bluesky.bluesky
 WHERE kind = 'commit'
 GROUP BY ALL;
 ```
