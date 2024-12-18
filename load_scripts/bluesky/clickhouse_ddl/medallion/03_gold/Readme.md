@@ -159,7 +159,7 @@ CREATE MATERIALIZED VIEW bluesky.displayName_per_user_mv TO bluesky.displayName_
 AS SELECT
     data.did as did,
     argMax(data.commit.record.displayName, bluesky_ts) as displayName
-FROM bluesky
+FROM bluesky.bluesky
 WHERE (kind = 'commit') AND (data.commit.collection = 'app.bsky.actor.profile') AND notEmpty(data.commit.record.displayName) AND (data.commit.operation = 'update' OR data.commit.operation = 'create')
 GROUP BY data.did;
 ```
@@ -170,7 +170,7 @@ INSERT INTO bluesky.displayName_per_user
 SELECT
     data.did as did,
     argMax(data.commit.record.displayName, bluesky_ts) as displayName
-FROM bluesky
+FROM bluesky.bluesky
 WHERE (kind = 'commit') AND (data.commit.collection = 'app.bsky.actor.profile') AND notEmpty(data.commit.record.displayName) AND (data.commit.operation = 'update' OR data.commit.operation = 'create')
 GROUP BY data.did;
 ```
@@ -544,7 +544,7 @@ CREATE MATERIALIZED VIEW bluesky.posts_per_language_mv TO bluesky.posts_per_lang
 AS SELECT
     arrayJoin(CAST(data.commit.record.langs, 'Array(String)')) AS language,
     count() AS posts
-FROM bluesky
+FROM bluesky.bluesky
 WHERE data.commit.collection = 'app.bsky.feed.post'
 GROUP BY language;
 ```
@@ -556,7 +556,7 @@ INSERT INTO bluesky.posts_per_language
 SELECT
     arrayJoin(CAST(data.commit.record.langs, 'Array(String)')) AS language,
     count() AS posts
-FROM bluesky
+FROM bluesky.bluesky
 WHERE data.commit.collection = 'app.bsky.feed.post'
 GROUP BY language;
 ```
