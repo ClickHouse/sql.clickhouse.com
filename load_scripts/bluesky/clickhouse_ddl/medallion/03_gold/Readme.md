@@ -78,43 +78,6 @@ WHERE _partition_id = CAST(if(next_to_process = 1200, current_partition, if(curr
 SETTINGS do_not_merge_across_partitions_select_final = 1
 ```
 
-## Dead-letter queue table
-
-```sql
-CREATE TABLE bluesky.bluesky_dlq
-(
-	`data` JSON(	SKIP `commit.record.reply.root.record`, 	SKIP `commit.record.value.value`),
-	`kind` LowCardinality(String),
-	`scrape_ts` DateTime64(6),
-	`bluesky_ts` DateTime64(6),
-	`dedup_hash` String
-)
-ENGINE = MergeTree
-ORDER BY (kind, scrape_ts)
-```
-
-
-## Materialized view for dead-letter queue table
-
-```sql
-CREATE MATERIALIZED VIEW bluesky.bluesky_dlq_mv TO bluesky.bluesky_dlq
-(
-	`data` JSON,
-	`kind` LowCardinality(String),
-	`scrape_ts` DateTime64(6),
-	`bluesky_ts` DateTime64(6),
-	`dedup_hash` String
-)
-AS SELECT
-	data,
-	kind,
-	scrape_ts,
-	bluesky_ts,
-	dedup_hash
-FROM bluesky.bluesky_raw
-WHERE abs(timeDiff(scrape_ts, bluesky_ts)) >= 1200
-```
-
 
 # Dictionaries and materialized views for common queries
 
