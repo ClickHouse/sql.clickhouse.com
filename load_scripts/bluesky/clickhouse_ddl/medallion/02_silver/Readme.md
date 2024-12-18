@@ -17,6 +17,21 @@ ORDER BY dedup_hash
 TTL toStartOfMinute(bluesky_ts) + toIntervalMinute(1440) SETTINGS ttl_only_drop_parts=1
 ```
 
+## Dead-letter queue table
+
+```sql
+CREATE TABLE bluesky.bluesky_dlq
+(
+	`data` JSON(	SKIP `commit.record.reply.root.record`, 	SKIP `commit.record.value.value`),
+	`kind` LowCardinality(String),
+	`scrape_ts` DateTime64(6),
+	`bluesky_ts` DateTime64(6),
+	`dedup_hash` String
+)
+ENGINE = MergeTree
+ORDER BY (kind, scrape_ts)
+```
+
 # Transfer from Bronze to Silver
 
 ## Materialized view for bluesky_dedup table
@@ -38,21 +53,6 @@ AS SELECT
 	dedup_hash
 FROM bluesky.bluesky_raw
 WHERE abs(timeDiff(scrape_ts, bluesky_ts)) < 1200
-```
-
-## Dead-letter queue table
-
-```sql
-CREATE TABLE bluesky.bluesky_dlq
-(
-	`data` JSON(	SKIP `commit.record.reply.root.record`, 	SKIP `commit.record.value.value`),
-	`kind` LowCardinality(String),
-	`scrape_ts` DateTime64(6),
-	`bluesky_ts` DateTime64(6),
-	`dedup_hash` String
-)
-ENGINE = MergeTree
-ORDER BY (kind, scrape_ts)
 ```
 
 
