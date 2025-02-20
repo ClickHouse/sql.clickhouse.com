@@ -20,6 +20,7 @@ const client = createClient({
 interface Query {
   id?: string;
   name: string;
+  slug: string,
   group: string;
   comment?: string;
   query: string;
@@ -47,6 +48,7 @@ const loadQueries = async () => {
           (
             id String DEFAULT generateULID(),
             name String,
+            slug: string,
             group String,
             query String,
             chart String DEFAULT '{"type":"line"}',
@@ -63,6 +65,7 @@ const loadQueries = async () => {
       for (const query of queries.queries) {
         const row:Query = {
           name: query.name,
+          slug: query.slug,
           group: query.group,
           query: query.comment ? `--${query.comment}\n${query.query}` : query.query,
           chart: query.chart,
