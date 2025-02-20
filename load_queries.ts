@@ -65,6 +65,7 @@ const loadQueries = async () => {
       for (const query of queries.queries) {
         const row:Query = {
           name: query.name,
+          slug: query.slug,
           group: query.group,
           query: query.comment ? `--${query.comment}\n${query.query}` : query.query,
           chart: query.chart,
