@@ -11,10 +11,12 @@ if (!CLICKHOUSE_URL || !CLICKHOUSE_USER || !CLICKHOUSE_PASSWORD) {
   process.exit(1);
 }
 
+console.log(`Running with CLICKHOUSE_URL: ${CLICKHOUSE_URL} and CLICKHOUSE_USER: ${CLICKHOUSE_USER}`)
+
 const client = createClient({
   url: CLICKHOUSE_URL,
   username: CLICKHOUSE_USER,
-  password: CLICKHOUSE_PASSWORD,
+  password: CLICKHOUSE_PASSWORD
 });
 
 interface Query {
