@@ -459,7 +459,7 @@
       "id": "KIZPJXDYG1QB6DQDFSAVIE",
       "name": "Number of unique and cumulative contributors",
       "group": "git",
-      "comment": "Calculates the unique and cumulative number of contributors to ClickHouse via pull request events, displayed as a monthly line chart.",
+      "comment": "Calculates the unique and cumulative number of contributors to ClickHouse via pull request events.",
       "query": "SELECT\n    month,\n    arrayUniq(cul_users) AS cul_users,\n    arrayUniq(uniq_users) AS uniq_users\nFROM\n(\n    SELECT\n        month,\n        groupArrayDistinctArray(uniq_users) OVER (ORDER BY month ASC) AS cul_users,\n        groupArrayDistinct(actor_login) AS uniq_users\n    FROM git.github_events\n    WHERE (repo_name LIKE 'ClickHouse%') AND (event_type = 'PullRequestEvent')\n    GROUP BY toStartOfMonth(created_at) AS month\n    ORDER BY month ASC\n)\n",
       "chart": {
         "type": "line"
@@ -2319,7 +2319,7 @@
       "id": "TGPZRLB1RMKOUS6ZTFQHRT",
       "name": "Total spent distribution",
       "group": "random",
-      "comment": "Visualizes the distribution of total spending in a dataset by grouping and counting purchases according to rounded down expenditure values, displayed as a line chart.",
+      "comment": "Visualizes the distribution of total spending in a dataset by grouping and counting purchases according to rounded down expenditure values.",
       "query": "SELECT\n    floor(total_spent) AS s,\n    count(*) AS n,\n    bar(n, 0, 350000, 50)\nFROM random.purchases\nGROUP BY s\nORDER BY s ASC",
       "chart": {
         "type": "line"
@@ -3104,7 +3104,7 @@
       "id": "TZE9ISWDW4UMB3BYVVZTSA",
       "name": "Total downloads and projects",
       "group": "pypi",
-      "comment": "Calculates the total number of downloads and unique projects from the PyPI downloads dataset, displayed as a line chart.",
+      "comment": "Calculates the total number of downloads and unique projects from the PyPI downloads dataset.",
       "query": "SELECT formatReadableQuantity(sum(count)) AS total, uniqExact(project) as projects FROM pypi.pypi_downloads",
       "chart": {
         "type": "line"
