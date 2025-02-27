@@ -3,7 +3,7 @@
     {
       "id": "12EBW5JKMBVOKUUANQPR1M",
       "name": "Disk space usage",
-      "group": "amazon_reviews",
+      "group": "amazon",
       "comment": "Displays storage metrics including compression ratios, row counts and partition data for active table segments",
       "query": "SELECT\n    disk_name,\n    formatReadableSize(sum(data_compressed_bytes) AS size) AS compressed,\n    formatReadableSize(sum(data_uncompressed_bytes) AS usize) AS uncompressed,\n    round(usize / size, 2) AS compr_rate,\n    sum(rows) AS rows,\n    count() AS part_count\nFROM system.parts\nWHERE (active = 1) AND (table = 'amazon_reviews')\nGROUP BY disk_name\nORDER BY size DESC;",
       "chart": {
@@ -16,7 +16,7 @@
     {
       "id": "BWOLVGMCMNCC3JDWF8EQGB",
       "name": "Top 10 most-helpful reviews",
-      "group": "amazon_reviews",
+      "group": "amazon",
       "comment": "Displays product titles and headlines for the 10 most helpful customer feedback entries",
       "query": "SELECT\n    product_title,\n    review_headline\nFROM amazon.amazon_reviews\nORDER BY helpful_votes DESC\nLIMIT 10;",
       "chart": {
@@ -29,7 +29,7 @@
     {
       "id": "2DSBPSYXKLHRWNWMDPSUJN",
       "name": "Top 10 products with most reviews",
-      "group": "amazon_reviews",
+      "group": "amazon",
       "comment": "Lists titles and feedback counts for the 10 most discussed items in the catalog",
       "query": "SELECT\n    any(product_title),\n    count()\nFROM amazon.amazon_reviews\nGROUP BY product_id\nORDER BY 2 DESC\nLIMIT 10;",
       "chart": {
@@ -42,7 +42,7 @@
     {
       "id": "OJJIEGD4NZK6KWH8FHYD64",
       "name": "Avg review ratings per month per product",
-      "group": "amazon_reviews",
+      "group": "amazon",
       "comment": "Shows monthly average star ratings for each item, sorted chronologically with newest first",
       "query": "SELECT\n    toStartOfMonth(review_date) AS month,\n    any(product_title),\n    avg(star_rating) AS avg_stars\nFROM amazon.amazon_reviews\nGROUP BY\n    month,\n    product_id\nORDER BY\n    month DESC,\n    product_id ASC\nLIMIT 20;",
       "chart": {
@@ -55,7 +55,7 @@
     {
       "id": "C8VZQAGWJKHVQFFTRB2R7B",
       "name": "Total number of votes per product category",
-      "group": "amazon_reviews",
+      "group": "amazon",
       "comment": "Aggregates total user voting activity across different merchandise categories",
       "query": "SELECT\n    sum(total_votes),\n    product_category\nFROM amazon.amazon_reviews\nGROUP BY product_category\nORDER BY 1 DESC\n",
       "chart": {
@@ -68,7 +68,7 @@
     {
       "id": "AT61M2PNSTBFNVKESBTJWE",
       "name": "Find products with 'awful' in reviews",
-      "group": "amazon_reviews",
+      "group": "amazon",
       "comment": "Aggregates ratings and occurrence counts, sorted by frequency of negative sentiment",
       "query": "SELECT\n    product_id,\n    any(product_title),\n    avg(star_rating),\n    count() AS count\nFROM amazon.amazon_reviews\nWHERE position(review_body, 'awful') > 0\nGROUP BY product_id\nORDER BY count DESC\nLIMIT 50;",
       "chart": {
@@ -81,7 +81,7 @@
     {
       "id": "VWSFKKJTECSIDPHNCYE5BP",
       "name": "Find products with 'awesome' in reviews",
-      "group": "amazon_reviews",
+      "group": "amazon",
       "comment": "Aggregates ratings and occurrence counts, sorted by frequency of positive sentiment",
       "query": "SELECT\n    product_id,\n    any(product_title),\n    avg(star_rating),\n    count() AS count\nFROM amazon.amazon_reviews\nWHERE position(review_body, 'awesome') > 0\nGROUP BY product_id\nORDER BY count DESC\nLIMIT 50;",
       "chart": {
