@@ -3277,6 +3277,155 @@
       "format": false,
       "params": [],
       "slug": "total-events"
+    },
+    {
+      "id": "8RCDBRGTSFEWMF84426UMP",
+      "name": "Get log severity count time series",
+      "group": "otel",
+      "comment": "Get log severity count time series",
+      "query": "SELECT toDateTime(toStartOfInterval(TimestampTime, INTERVAL 60 second)) as time, SeverityText, count() as count\nFROM otel.otel_logs\nWHERE time >= NOW() - INTERVAL 1 HOUR\nGROUP BY SeverityText, time\nORDER BY time;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [],
+      "slug": "get-log-severity-count-time-series"
+    }, 
+    {
+      "id": "FTVXJKBPRWTVLHJTXAD2QW",
+      "name": "Find any log",
+      "group": "otel",
+      "comment": "Find any log",
+      "query": "SELECT Timestamp as log_time, Body\nFROM otel.otel_logs\nWHERE TimestampTime >= NOW() - INTERVAL 1 HOUR\nLimit 100;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [],
+      "slug": "find-any-log"
+    },
+    {
+      "id": "D554YQPU6A8JFFBBX34GSK",
+      "name": "Find log with specific service",
+      "group": "otel",
+      "comment": "Find log with specific service",
+      "query": "SELECT Timestamp as log_time, Body\nFROM otel.otel_logs\nWHERE ServiceName = 'recommendationservice'\n  AND TimestampTime >= NOW() - INTERVAL 1 HOUR\nLimit 100;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [],
+      "slug": "find-log-with-specific-service"
+    },
+    {
+      "id": "32O9PRNXRWFK95BPL13X2M",
+      "name": "Find log with specific attribute",
+      "group": "otel",
+      "comment": "Find log with specific attribute",
+      "query": "SELECT Timestamp as log_time, Body, LogAttributes['productId']\nFROM otel.otel_logs\nWHERE LogAttributes['productId'] = '9SIQT8TOJO' --\"productId'\": \"9SIQT8TOJO\"\n  AND TimestampTime >= NOW() - INTERVAL 1 HOUR\nLimit 10;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [],
+      "slug": "find-log-with-specific-attribute"
+    },
+    {
+      "id": "VAOKUGRCA3H4DWEX2SLJOA",
+      "name": "Find log with body contain string token",
+      "group": "otel",
+      "comment": "Find log with body contain string token",
+      "query": "SELECT Timestamp as log_time, Body\nFROM otel.otel_logs\nWHERE hasToken(Body, 'otelcol')\n  AND TimestampTime >= NOW() - INTERVAL 1 HOUR\nLimit 100;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [],
+      "slug": "find-log-with-body-contain-string-token"
+    },
+    {
+      "id": "2V4EOPEFVFEWZ5NNJWJBPP",
+      "name": "Find log with body contain string",
+      "group": "otel",
+      "comment": "Find log with body contain string",
+      "query": "SELECT Timestamp as log_time, Body\nFROM otel.otel_logs\nWHERE Body like '%binoculars%'\n  AND TimestampTime >= NOW() - INTERVAL 1 HOUR\nLimit 100;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [],
+      "slug": "find-log-with-body-contain-string"
+    },
+    {
+      "id": "HBCG41BGER4XBJNYAEMEKF",
+      "name": "Find spans with specific attribute",
+      "group": "otel",
+      "comment": "Find spans with specific attribute",
+      "query": "SELECT Timestamp,\n       TraceId,\n       SpanId,\n       ParentSpanId,\n       SpanName,\n       SpanKind,\n       ServiceName,\n       Duration,\n       StatusCode,\n       StatusMessage,\n       toString(SpanAttributes),\n       toString(ResourceAttributes),\n       toString(Events.Name),\n       toString(Links.TraceId)\nFROM otel.otel_traces\nWHERE ServiceName = 'recommendationservice'\n  AND SpanAttributes['rpc.service'] = 'oteldemo.ProductCatalogService'\n  AND Timestamp >= NOW() - INTERVAL 1 HOUR\nLimit 100;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [],
+      "slug": "find-log-with-specific-attribute"
+    },
+    {
+      "id": "47NRMW3YWABJC7DTE3N73Y",
+      "name": "Find spans with StatusCode as error",
+      "group": "otel",
+      "comment": "Find spans with StatusCode as error",
+      "query": "SELECT Timestamp,\n       TraceId,\n       SpanId,\n       ParentSpanId,\n       SpanName,\n       SpanKind,\n       ServiceName,\n       Duration,\n       StatusCode,\n       StatusMessage,\n       toString(SpanAttributes),\n       toString(ResourceAttributes),\n       toString(Events.Name),\n       toString(Links.TraceId)\nFROM otel.otel_traces\nWHERE ServiceName = 'recommendationservice'\n  AND StatusCode = 'STATUS_CODE_ERROR'\n  AND Timestamp >= NOW() - INTERVAL 1 HOUR\nLimit 100;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [],
+      "slug": "find-spans-with-statuscode-as-error"
+    },
+    {
+      "id": "5UFZE1TVOY6TMAJWKWGXYS",
+      "name": "Find slow spans",
+      "group": "otel",
+      "comment": "Find slow spans",
+      "query": "SELECT Timestamp,\n       TraceId,\n       SpanId,\n       ParentSpanId,\n       SpanName,\n       SpanKind,\n       ServiceName,\n       Duration,\n       StatusCode,\n       StatusMessage,\n       toString(SpanAttributes),\n       toString(ResourceAttributes),\n       toString(Events.Name),\n       toString(Links.TraceId)\nFROM otel.otel_traces\nWHERE ServiceName = 'recommendationservice'\n  AND Duration > 1 * 1e3\n  AND Timestamp >= NOW() - INTERVAL 1 HOUR\nLimit 100;",
+      "chart": {
+        "type": "line",
+        "config": {
+          "xaxis": "year",
+          "yaxis": "99th_avg_temp",
+          "series": "country",
+          "title": "Temperature by country and year"
+        }
+      },
+      "format": false,
+      "params": [],
+      "slug": "find-slow-span"
+    },
+    {
+      "id": "PGYQAA2PUPRUMGAF959CHL",
+      "name": "Count number of logs",
+      "group": "otel",
+      "comment": "ount number of logs",
+      "query": "SELECT count() FROM otel.otel_logs",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [],
+      "slug": "count-number-logs"
+    },
+    {
+      "id": "SP8B8Z23GYU3OUXTPCZ2PD",
+      "name": "Count number of traces",
+      "group": "otel",
+      "comment": "Count number of traces",
+      "query": "SELECT count() FROM otel.otel_traces",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [],
+      "slug": "count-number-traces"
     }
   ]
 }
