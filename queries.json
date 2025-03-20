@@ -3426,6 +3426,24 @@
       "format": false,
       "params": [],
       "slug": "count-number-traces"
+    },
+    {
+      "id": "F9DJMJYTJRWUYEWZJHZOY5",
+      "name": "Total download for Clickhouse",
+      "group": "rubygems",
+      "comment": "",
+      "query": "SELECT name, date, total_downloads FROM rubygems.daily_downloads WHERE name ILIKE 'ClickHouse%' ORDER BY date ASC \n",
+      "chart": {
+        "type": "line",
+        "config": {
+          "xaxis": "date",
+          "yaxis": "total_downloads",
+          "series": "name"
+        }
+      },
+      "format": false,
+      "params": [],
+      "slug": "total-download-clickhouse"
     }
   ]
 }
