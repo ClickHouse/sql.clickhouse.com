@@ -3429,9 +3429,9 @@
     },
     {
       "id": "F9DJMJYTJRWUYEWZJHZOY5",
-      "name": "Total download for Clickhouse",
+      "name": "Total download for Clickhouse gem",
       "group": "rubygems",
-      "comment": "",
+      "comment": "Modify the query for your own gem",
       "query": "SELECT name, date, total_downloads FROM rubygems.daily_downloads WHERE name ILIKE 'ClickHouse%' ORDER BY date ASC \n",
       "chart": {
         "type": "line",
@@ -3443,7 +3443,175 @@
       },
       "format": false,
       "params": [],
-      "slug": "total-download-clickhouse"
+      "slug": "total-download-clickhouse-gem"
+    },
+    {
+      "id": "TOPGEMSTJRWUYEWZJHZOY5",
+      "name": "Top gems",
+      "group": "rubygems",
+      "comment": "Top gems by downloads",
+      "query": "SELECT name, max(total_downloads) AS total_downloads \nFROM rubygems.daily_downloads \nGROUP BY name \nORDER BY total_downloads DESC \nLIMIT 5 \n",
+      "chart": {
+        "type": "bar",
+        "config": {
+          "xaxis": "gem",
+          "yaxis": "total_downloads",
+          "title": "Top gems"
+        }
+      },
+      "format": false,
+      "params": [],
+      "slug": "most-downloaded-ruby-gems"
+    },
+    {
+      "id": "RECENTRELEASESWZJHZOY5",
+      "name": "Recently released Ruby gems",
+      "group": "rubygems",
+      "comment": "Recent releases for popular gems",
+      "query": "WITH (\n        SELECT max(created_at) AS max_date\n        FROM rubygems.versions\n    ) AS max_date\nSELECT\n    release_month AS x,\n    name AS y,\n    uniqExact(number) AS z\nFROM rubygems.versions\nWHERE (rubygem_id IN (\n    SELECT id\n    FROM rubygems.rubygems\n    WHERE name IN ['bundler', 'aws-sdk-core', 'aws-sigv4', 'jmespath', 'aws-partitions']\n)) AND (toStartOfMonth(created_at) > toStartOfMonth(max_date - toIntervalMonth(6)))\nGROUP BY\n    dictGet(rubygems.id_to_name, 'name', rubygem_id) AS name,\n    toMonth(created_at) AS month,\n    formatDateTime(created_at, '%b') AS release_month\nORDER BY month ASC\nLIMIT 30",
+      "chart": {"type":"heatmap","config": {"title":"Recent releases","xaxis":"x","yaxis":"y","zaxis":"z"}},
+      "format": false,
+      "params": [],
+      "slug": "recently-released-ruby-gems"
+    },
+    {
+      "id": "VO8FFZAITKDNVCRVTJROMR",
+      "name": "Emerging gems",
+      "group": "rubygems",
+      "comment": "Gems recently releasd with a high number of downloads",
+      "query": "WITH (\n   SELECT max(max_date)\n   FROM rubygems.gems_downloads_max_min\n) AS max_date\nSELECT\n   gem,\n   sum(count) AS c\nFROM rubygems.downloads_per_day\nWHERE gem IN (\n   SELECT name\n   FROM rubygems.gems_downloads_max_min\n   GROUP BY name\n   HAVING min(min_date) >= (max_date - toIntervalMonth(3))\n)\nGROUP BY gem\nORDER BY c DESC\nLIMIT 7\nSETTINGS enable_analyzer=0",
+      "chart": {
+        "type": "bar",
+        "config": {
+          "title": "Emerging gems",
+          "xaxis": "gem",
+          "yaxis": "c",
+          "series": "gem",
+          "stack": true
+        }
+      },
+      "format": false,
+      "params": [],
+      "slug": "emerging-ruby-gems"
+    },
+    {
+      "id": "R8OJDICUYWUJXDSGTOTK56",
+      "name": "Hot gems",
+      "group": "rubygems",
+      "comment": "Gems showing high downloads recently",
+      "query": "WITH\n    (\n        SELECT max(max_date)\n        FROM rubygems.gems_downloads_max_min\n    ) AS max_date,\n    percentage_increases AS\n    (\n        SELECT\n            name,\n            sum(daily_downloads) AS c,\n            toStartOfMonth(date) AS month,\n            any(c) OVER (PARTITION BY name ORDER BY month ASC ROWS BETWEEN 1 PRECEDING AND 1 PRECEDING) AS previous,\n            if(previous > 0, (c - previous) / previous, 0) AS percent_increase\n        FROM rubygems.daily_downloads\n        WHERE ((month > (toStartOfMonth(max_date) - toIntervalMonth(6))) AND (month <= toStartOfMonth(max_date))) AND (name IN (\n            SELECT name\n            FROM rubygems.daily_downloads\n            GROUP BY name\n            HAVING max(total_downloads) > 100000\n        ))\n        GROUP BY\n            name,\n            month\n        ORDER BY\n            name ASC,\n            month ASC\n    )\nSELECT\n    formatDateTime(month, '%b') AS x,\n    name AS y,\n    c AS z\nFROM percentage_increases\nWHERE name IN (\n    SELECT name\n    FROM percentage_increases\n    GROUP BY name\n    ORDER BY max(percent_increase) DESC\n    LIMIT 5\n)\nORDER BY\n    month DESC,\n    name ASC",
+      "chart": {
+        "type": "heatmap",
+        "config": {
+          "title": "Hot gems",
+          "xaxis": "x",
+          "yaxis": "y",
+          "zaxis": "z"
+        }
+      },
+      "format": false,
+      "params": [],
+      "slug": "hot-ruby-gems"
+    },
+    {
+      "id": "HVMKR3JXFT4DA8NMAPGXKM",
+      "name": "Daily downloads for gem",
+      "group": "rubygems",
+      "comment": "Daily downloads for gem. Modify for your gem.",
+      "query": "SELECT\n\tdate,\n\tsum(count) AS total_downloads\nFROM rubygems.downloads_per_day\nWHERE (gem = 'bundler')\nGROUP BY date\nORDER BY date ASC",
+      "chart": {
+        "type": "line",
+        "config": {
+          "title": "Gem downloads over time",
+          "xaxis": "date",
+          "yaxis": "total_downloads"
+        }
+      },
+      "format": false,
+      "params": [],
+      "slug": "daily-downloads-for-ruby-gems"
+    },
+    {
+      "id": "FARXRRUASWHZWOZBJMLQPH",
+      "name": "Hourly downloads for gem",
+      "group": "rubygems",
+      "comment": "Modify for your own Gem. NOTE: We recommended applying a time range (weeks max) to avoid quota limits",
+      "query": "SELECT \n  toStartOfHour(timestamp) as hour,\n  count() as total_downloads\nFROM rubygems.downloads\nWHERE (gem = 'bundler') AND timestamp > now() - INTERVAL 2 DAYS\nGROUP BY hour\nORDER BY hour ASC",
+      "chart": {
+        "type": "line",
+        "config": {
+          "title": "Gem downloads by hour",
+          "xaxis": "hour",
+          "yaxis": "total_downloads"
+        }
+      },
+      "format": false,
+      "params": [],
+      "slug": "hourly-downloads-for-ruby-gems"
+    },
+    {
+      "id": "U6VM8WPNWRWKBYBZE3QTP9",
+      "name": "Gem downloads by version over time",
+      "group": "rubygems",
+      "comment": "Daily gem downloads by version over time. NOTE: We recommended applying a time range (weeks max) to avoid quota limits.",
+      "query": "WITH top_versions AS\n\t(\n    \tSELECT user_agent.ruby\n    \tFROM rubygems.downloads\n    \tWHERE (timestamp BETWEEN '2025-01-01' AND '2025-04-03') AND (gem = 'bundler')\n    \tGROUP BY user_agent.ruby\n    \tORDER BY count() DESC\n    \tLIMIT 10\n\t)\nSELECT\n\tif(user_agent.ruby IN (top_versions), user_agent.ruby, 'other') AS ruby_version,\n\ttoStartOfHour(timestamp) AS hour,\n\tcount() AS downloads\nFROM rubygems.downloads\nWHERE (timestamp BETWEEN '2025-01-01' AND '2025-04-03') AND (gem = 'bundler') AND (ruby_version != '')\nGROUP BY\n\thour,\n\truby_version\nORDER BY\n\thour DESC,\n\truby_version ASC\n",
+      "chart": {
+        "type": "area",
+        "config": {
+          "title": "Gem downloads by version over time",
+          "xaxis": "hour",
+          "yaxis": "downloads",
+          "series": "ruby_version"
+        }
+      },
+      "format": false,
+      "params": [],
+      "slug": "gem-downloads-by-version-over-time"
+    },
+    {
+      "id": "WDKDQCWS6ERAVBMXHGR2LE",
+      "name": "Gem downloads by system over time",
+      "group": "rubygems",
+      "comment": "Daily gem downloads by system over time. NOTE: We recommended applying a time range (weeks max) to avoid quota limits.",
+      "query": "WITH systems AS\n\t(\n    \tSELECT user_agent.platform.os\n    \tFROM rubygems.downloads\n    \tWHERE (timestamp BETWEEN '2025-01-01' AND '2025-04-03')AND (gem = 'bundler') AND (user_agent.platform.os NOT IN ('', 'unknown'))\n    \tGROUP BY user_agent.platform.os\n    \tORDER BY count() DESC\n    \tLIMIT 5\n\t)\nSELECT\n\tuser_agent.platform.os AS name,\n\ttoStartOfHour(timestamp) AS hour,\n\tcount() AS total_downloads\nFROM rubygems.downloads\nWHERE (timestamp BETWEEN '2025-01-01' AND '2025-04-03') AND (gem = 'bundler') AND (user_agent.platform.os IN (systems))\nGROUP BY\n\tname,\n\thour\nORDER BY\n\thour ASC,\n\tname DESC",
+      "chart": {
+        "type": "line",
+        "config": {
+          "title": "Gem downloads by system over time",
+          "xaxis": "hour",
+          "yaxis": "total_downloads",
+          "series": "name"
+        }
+      },
+      "format": false,
+      "params": [],
+      "slug": "gem-downloads-by-system-over-time"
+    },
+    {
+      "id": "E8BFQC959BYWMAWQKEANSM",
+      "name": "Latest version of a gem",
+      "group": "rubygems",
+      "comment": "Latest version of a gem. Modify for your own gem.",
+      "query": "SELECT canonical_number\nFROM rubygems.versions\nWHERE rubygem_id = dictGet(rubygems.name_to_id, 'id', 'bundler')\nORDER BY arrayMap(x -> toUInt8OrDefault(x, 0), splitByChar('.', canonical_number)) DESC\nLIMIT 1",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [],
+      "slug": "latest-version-of-a-gem"
+    },
+    {
+      "id": "8DXZVOAAPNDSY2BXMDVSL1",
+      "name": "Gem downloads for latest version",
+      "group": "rubygems",
+      "comment": "Finds the latest version for a gem before computing weekly downloads. NOTE: We recommended applying a time range (weeks max) to avoid quota limits.",
+      "query": "WITH (\n    \tSELECT canonical_number\n    \tFROM rubygems.versions\n    \tWHERE rubygem_id = dictGet(rubygems.name_to_id, 'id', 'bundler')\n    \tORDER BY arrayMap(x -> toUInt8OrDefault(x, 0), splitByChar('.', canonical_number)) DESC\n    \tLIMIT 1\n\t) AS latest_version\nSELECT\n\ttoStartOfWeek(timestamp) AS week,\n\tcount() AS downloads\nFROM rubygems.downloads\nWHERE (gem = 'bundler') AND (version = latest_version)\nGROUP BY week\nORDER BY week ASC\n",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [],
+      "slug": "gem-downloads-for-latest-version"
     }
   ]
 }
