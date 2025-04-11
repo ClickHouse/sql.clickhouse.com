@@ -3554,7 +3554,7 @@
       "name": "Gem downloads by version over time",
       "group": "rubygems",
       "comment": "Daily gem downloads by version over time. NOTE: We recommended applying a time range (weeks max) to avoid quota limits.",
-      "query": "WITH top_versions AS\n\t(\n    \tSELECT user_agent.ruby\n    \tFROM rubygems.downloads\n    \tWHERE (timestamp BETWEEN '2025-01-01' AND '2025-04-03') AND (gem = 'bundler')\n    \tGROUP BY user_agent.ruby\n    \tORDER BY count() DESC\n    \tLIMIT 10\n\t)\nSELECT\n\tif(user_agent.ruby IN (top_versions), user_agent.ruby, 'other') AS ruby_version,\n\ttoStartOfHour(timestamp) AS hour,\n\tcount() AS downloads\nFROM rubygems.downloads\nWHERE (timestamp BETWEEN '2025-01-01' AND '2025-04-03') AND (gem = 'bundler') AND (ruby_version != '')\nGROUP BY\n\thour,\n\truby_version\nORDER BY\n\thour DESC,\n\truby_version ASC\n",
+      "query": "WITH top_versions AS\n\t(\n    \tSELECT user_agent.ruby\n    \tFROM rubygems.downloads\n    \tWHERE (timestamp BETWEEN '2025-01-01' AND '2025-04-03') AND (gem = 'bundler')\n    \tGROUP BY user_agent.ruby\n    \tORDER BY count() DESC\n    \tLIMIT 10\n\t)\nSELECT\n\tuser_agent.ruby AS ruby_version,\n\ttoStartOfHour(timestamp) AS hour,\n\tcount() AS downloads\nFROM rubygems.downloads\nWHERE (timestamp BETWEEN '2025-01-01' AND '2025-04-03') AND (gem = 'bundler') AND user_agent.ruby IN top_versions\nGROUP BY\n\thour,\n\truby_version\nORDER BY\n\thour DESC,\n\truby_version ASC\n",
       "chart": {
         "type": "area",
         "config": {
