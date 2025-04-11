@@ -3491,7 +3491,8 @@
         }
       },
       "format": false,
-      "params": []
+      "params": [],
+      "slug": "emerging-ruby-gems"
     },
     {
       "id": "R8OJDICUYWUJXDSGTOTK56",
@@ -3509,7 +3510,8 @@
         }
       },
       "format": false,
-      "params": []
+      "params": [],
+      "slug": "hot-ruby-gems"
     },
     {
       "id": "HVMKR3JXFT4DA8NMAPGXKM",
@@ -3526,7 +3528,8 @@
         }
       },
       "format": false,
-      "params": []
+      "params": [],
+      "slug": "daily-downloads-for-ruby-gems"
     },
     {
       "id": "FARXRRUASWHZWOZBJMLQPH",
@@ -3543,7 +3546,8 @@
         }
       },
       "format": false,
-      "params": []
+      "params": [],
+      "slug": "hourly-downloads-for-ruby-gems"
     },
     {
       "id": "U6VM8WPNWRWKBYBZE3QTP9",
@@ -3561,7 +3565,8 @@
         }
       },
       "format": false,
-      "params": []
+      "params": [],
+      "slug": "gem-downloads-by-version-over-time"
     },
     {
       "id": "WDKDQCWS6ERAVBMXHGR2LE",
@@ -3579,7 +3584,8 @@
         }
       },
       "format": false,
-      "params": []
+      "params": [],
+      "slug": "gem-downloads-by-system-over-time"
     },
     {
       "id": "E8BFQC959BYWMAWQKEANSM",
@@ -3591,7 +3597,8 @@
         "type": "line"
       },
       "format": false,
-      "params": []
+      "params": [],
+      "slug": "latest-version-of-a-gem"
     },
     {
       "id": "8DXZVOAAPNDSY2BXMDVSL1",
@@ -3603,7 +3610,8 @@
         "type": "line"
       },
       "format": false,
-      "params": []
+      "params": [],
+      "slug": "gem-downloads-for-latest-version"
     }
   ]
 }
