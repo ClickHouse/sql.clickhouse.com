@@ -137,7 +137,10 @@ shift_traces() {
         addMicroseconds('${MAX_TS}', dateDiff('microsecond', min, Timestamp)) AS Timestamp,
         lower(hex(sipHash128(TraceId, '${random_string}'))) AS TraceId,
         lower(hex(sipHash64(SpanId, '${random_string}'))) SpanId,
-        lower(hex(sipHash64(ParentSpanId, '${random_string}'))) ParentSpanId,
+        CASE
+            WHEN ParentSpanId != '' AND ParentSpanId IS NOT NULL THEN lower(hex(sipHash64(ParentSpanId, '${random_string}')))
+            ELSE ''
+        END AS ParentSpanId,
         TraceState,
         SpanName,
         SpanKind,

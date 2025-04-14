@@ -3612,6 +3612,19 @@
       "format": false,
       "params": [],
       "slug": "gem-downloads-for-latest-version"
+    },
+    {
+      "id": "SIBPY2Q4LMTHVWPXWX6WAO",
+      "name": "Authors commits change over time with respect to code/comments percentage",
+      "group": "git",
+      "comment": "How does an authors commits change over time with respect to code/comments percentage?",
+      "query": "SELECT\n    author,\n    countIf(line_type = 'Code') AS code_lines,\n    countIf((line_type = 'Comment') OR (line_type = 'Punct')) AS comments,\n    code_lines / (comments + code_lines) AS ratio_code,\n    toStartOfWeek(time) AS week\nFROM git.clickhouse_line_changes\nGROUP BY\n    time,\n    author\nORDER BY\n    author ASC,\n    time ASC\nLIMIT 10",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": [],
+      "slug": "authors-commit-change-over-time-with-respect-to-code-comments-percentage"
     }
   ]
 }
