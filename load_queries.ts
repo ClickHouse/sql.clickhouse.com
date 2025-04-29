@@ -21,6 +21,7 @@ const client = createClient({
 
 interface Query {
   id?: string;
+  number: number,
   name: string;
   slug: string;
   group: string;
@@ -49,6 +50,7 @@ const loadQueries = async () => {
           CREATE TABLE IF NOT EXISTS default.queries_temp
           (
             id String DEFAULT generateULID(),
+            number UInt32,
             name String,
             slug String,
             group String,
@@ -64,9 +66,11 @@ const loadQueries = async () => {
       console.log("Created temporary table queries_temp");
 
       // Insert data into the temporary table
+      let i = 0;
       for (const query of queries.queries) {
         const row:Query = {
           name: query.name,
+          number: i,
           slug: query.slug,
           group: query.group,
           query: query.comment ? `--${query.comment}\n${query.query}` : query.query,
@@ -82,6 +86,7 @@ const loadQueries = async () => {
           values: [row],
           format: 'JSONEachRow',
         });
+        i+=1;
         console.log(`Inserted query: ${query.name} into queries_temp`);
       }
 
