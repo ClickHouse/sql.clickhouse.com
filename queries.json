@@ -3625,6 +3625,42 @@
       "format": false,
       "params": [],
       "slug": "authors-commit-change-over-time-with-respect-to-code-comments-percentage"
+    },
+    {
+      "id": "A2TPUJXSS5AC8IYJK8VWCJ",
+      "name": "groupArrayDistinct",
+      "group": "docs",
+      "comment": "Finds all the unique User Agent OS codes recorded for visitors landing on a domain using the groupArrayDistinct aggregate combinator function.",
+      "query": "SELECT\n    URLDomain,\n    groupArrayDistinct(OS) AS distinct_os_codes\nFROM metrica.hits_v1\nWHERE URLDomain != '' -- Consider only hits with a recorded domain\nGROUP BY URLDomain\nORDER BY URLDomain ASC\nLIMIT 20;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
+    },
+    {
+      "id": "KNNOFS2MNTN8CUYQL8HVTD",
+      "name": "sumIf",
+      "group": "docs",
+      "comment": "Calculate trading volume by price direction in the first half of the year 2002 using the sumIf aggregate combinator function.",
+      "query": "SELECT \n    toStartOfMonth(date) AS month,\n    formatReadableQuantity(sumIf(volume, price > open)) AS volume_on_up_days,\n    formatReadableQuantity(sumIf(volume, price < open)) AS volume_on_down_days,\n    formatReadableQuantity(sumIf(volume, price = open)) AS volume_on_neutral_days,\n    formatReadableQuantity(sum(volume)) AS total_volume\nFROM stock.stock\nWHERE date BETWEEN '2002-01-01' AND '2002-12-31'\nGROUP BY month\nORDER BY month;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
+    },
+    {
+      "id": "TCQNLPIKU9CTJ1UFN1BATN",
+      "name": "sumForEach",
+      "group": "docs",
+      "comment": "Using the sumForEach aggregate combinator function to analyze how desktop versus mobile traffic varies by hour of the day.",
+      "query": "SELECT\n    toHour(EventTime) AS hour_of_day,\n    -- Use sumForEach to count desktop and mobile visits in one pass\n    sumForEach([\n        IsMobile = 0, -- Desktop visits (IsMobile = 0)\n        IsMobile = 1  -- Mobile visits (IsMobile = 1)\n    ]) AS device_counts\nFROM metrica.hits\nGROUP BY hour_of_day\nORDER BY hour_of_day;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
     }
   ]
 }
