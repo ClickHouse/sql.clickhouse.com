@@ -1,0 +1,19 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: 'bash'
+  args: ['-c', 'docker pull gcr.io/$PROJECT_ID/hyper-dx-sample:latest || exit 0']
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+            'build',
+            '-t', 'gcr.io/$PROJECT_ID/hyper-dx-sample:latest',
+            '--cache-from', 'gcr.io/$PROJECT_ID/hyper-dx-sample:latest',
+            '.'
+        ]
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/hyper-dx-sample:latest']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'jobs', 'deploy', 'hyper-dx-sample', '--image', 'gcr.io/$PROJECT_ID/hyper-dx-sample:latest', '--region', 'us-central1']
+  images: ['gcr.io/$PROJECT_ID/hyper-dx-sample:latest']

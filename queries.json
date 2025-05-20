@@ -3221,7 +3221,7 @@
       "name": "Top event types by count",
       "group": "bluesky",
       "comment": "Counts and orders top event types by number of posts from the bluesky dataset, displaying results in a horizontal bar chart.",
-      "query": "SELECT collection,\n       sum(posts) AS posts\nFROM bluesky.top_event_types\nGROUP BY collection\nORDER BY posts DESC;",
+      "query": "SELECT event,\n       sum(posts) AS posts\nFROM bluesky.top_event_types\nGROUP BY event\nORDER BY posts DESC;",
       "chart": {
         "type": "horizontal bar",
         "config": {
@@ -3239,7 +3239,7 @@
       "name": "Top event types by unique users",
       "group": "bluesky",
       "comment": "Determines and ranks the top event types by the number of unique users associated with each type.",
-      "query": "SELECT collection,\n uniqMerge(users) AS users\nFROM bluesky.top_event_types\nGROUP BY collection\nORDER BY users DESC;",
+      "query": "SELECT event,\n uniqMerge(users) AS users\nFROM bluesky.top_event_types\nGROUP BY event\nORDER BY users DESC;",
       "chart": {
         "type": "horizontal bar",
         "config": {
@@ -3257,7 +3257,7 @@
       "name": "Top event types",
       "group": "bluesky",
       "comment": "Analyzes and ranks the most popular event types by the number of posts, also showing unique user engagement for each type.",
-      "query": "SELECT collection,\n  sum(posts) AS posts,\n  uniqMerge(users) AS users\nFROM bluesky.top_event_types\nGROUP BY collection\nORDER BY posts DESC;",
+      "query": "SELECT event,\n  sum(count) AS posts,\n  uniqMerge(users) AS users\nFROM bluesky.top_event_types\nGROUP BY event\nORDER BY posts DESC;",
       "chart": {
         "type": "line"
       },
@@ -3290,7 +3290,7 @@
       "format": false,
       "params": [],
       "slug": "get-log-severity-count-time-series"
-    }, 
+    },
     {
       "id": "FTVXJKBPRWTVLHJTXAD2QW",
       "name": "Find any log",
@@ -3469,7 +3469,15 @@
       "group": "rubygems",
       "comment": "Recent releases for popular gems",
       "query": "WITH (\n        SELECT max(created_at) AS max_date\n        FROM rubygems.versions\n    ) AS max_date\nSELECT\n    release_month AS x,\n    name AS y,\n    uniqExact(number) AS z\nFROM rubygems.versions\nWHERE (rubygem_id IN (\n    SELECT id\n    FROM rubygems.rubygems\n    WHERE name IN ['bundler', 'aws-sdk-core', 'aws-sigv4', 'jmespath', 'aws-partitions']\n)) AND (toStartOfMonth(created_at) > toStartOfMonth(max_date - toIntervalMonth(6)))\nGROUP BY\n    dictGet(rubygems.id_to_name, 'name', rubygem_id) AS name,\n    toMonth(created_at) AS month,\n    formatDateTime(created_at, '%b') AS release_month\nORDER BY month ASC\nLIMIT 30",
-      "chart": {"type":"heatmap","config": {"title":"Recent releases","xaxis":"x","yaxis":"y","zaxis":"z"}},
+      "chart": {
+        "type": "heatmap",
+        "config": {
+          "title": "Recent releases",
+          "xaxis": "x",
+          "yaxis": "y",
+          "zaxis": "z"
+        }
+      },
       "format": false,
       "params": [],
       "slug": "recently-released-ruby-gems"
