@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configurable variables
-CLICKHOUSE_USER="${CLICKHOUSE_USERNAME:-default}"
+CLICKHOUSE_USER="${CLICKHOUSE_USER:-default}"
 CLICKHOUSE_PASSWORD="${CLICKHOUSE_PASSWORD}"
 CLICKHOUSE_DATABASE="${CLICKHOUSE_DATABASE:-otel_v2_temp}"
 CLICKHOUSE_HOST="sql-clickhouse.clickhouse.com"
@@ -10,7 +10,7 @@ HOURS="${HOURS:-29}"
 # Get start time (optional step from earlier)
 START_TIME=$(clickhouse client \
   --secure --host="$CLICKHOUSE_HOST" \
-  --user="$CLICKHOUSE_USERNAME" \
+  --user="$CLICKHOUSE_USER" \
   --password="$CLICKHOUSE_PASSWORD" \
   --query="SELECT subtractHours(now(), $HOURS) AS start FORMAT TabSeparated" 2>/dev/null)
 
@@ -19,7 +19,7 @@ echo "Start time: $START_TIME"
 # Create database if it doesn't exist
 clickhouse client \
   --secure --host="$CLICKHOUSE_HOST" \
-  --user="$CLICKHOUSE_USERNAME" \
+  --user="$CLICKHOUSE_USER" \
   --password="$CLICKHOUSE_PASSWORD" \
   --query="CREATE DATABASE IF NOT EXISTS $CLICKHOUSE_DATABASE"
 
@@ -41,13 +41,13 @@ for table in "${tables[@]}"; do
   echo "Creating ${CLICKHOUSE_DATABASE}.${table}"
   clickhouse client \
     --secure --host="$CLICKHOUSE_HOST" \
-    --user="$CLICKHOUSE_USERNAME" \
+    --user="$CLICKHOUSE_USER" \
     --password="$CLICKHOUSE_PASSWORD" \
     --query="CREATE TABLE IF NOT EXISTS ${CLICKHOUSE_DATABASE}.${table} AS otel_v2_source.${table}"
   echo "Creating ${CLICKHOUSE_DATABASE}.${table}_temp"
   clickhouse client \
     --secure --host="$CLICKHOUSE_HOST" \
-    --user="$CLICKHOUSE_USERNAME" \
+    --user="$CLICKHOUSE_USER" \
     --password="$CLICKHOUSE_PASSWORD" \
     --query="CREATE TABLE IF NOT EXISTS ${CLICKHOUSE_DATABASE}.${table}_temp AS otel_v2_source.${table}"
 done
@@ -60,7 +60,7 @@ for table in "${tables[@]}"; do
   echo "Truncating table ${CLICKHOUSE_DATABASE}.${table}_temp"
   clickhouse client \
     --secure --host="$CLICKHOUSE_HOST" \
-    --user="$CLICKHOUSE_USERNAME" \
+    --user="$CLICKHOUSE_USER" \
     --password="$CLICKHOUSE_PASSWORD" \
     --query="TRUNCATE ${CLICKHOUSE_DATABASE}.${table}_temp"
 done
@@ -70,7 +70,7 @@ done
 echo -n "Inserting adjusted logs into ${CLICKHOUSE_DATABASE}.otel_logs_temp..."
 clickhouse client \
   --secure --host="$CLICKHOUSE_HOST" \
-  --user="$CLICKHOUSE_USERNAME" \
+  --user="$CLICKHOUSE_USER" \
   --password="$CLICKHOUSE_PASSWORD" \
   --query="
     INSERT INTO ${CLICKHOUSE_DATABASE}.otel_logs_temp
@@ -106,7 +106,7 @@ echo "OK"
 echo -n "Inserting adjusted traces into ${CLICKHOUSE_DATABASE}.otel_traces_temp..."
 clickhouse client \
   --secure --host="$CLICKHOUSE_HOST" \
-  --user="$CLICKHOUSE_USERNAME" \
+  --user="$CLICKHOUSE_USER" \
   --password="$CLICKHOUSE_PASSWORD" \
   --query="
     INSERT INTO ${CLICKHOUSE_DATABASE}.otel_traces_temp WITH (
@@ -146,7 +146,7 @@ echo "OK"
 echo -n "Inserting adjusted metrics into ${CLICKHOUSE_DATABASE}.otel_metrics_gauge_temp..."
 clickhouse client \
   --secure --host="$CLICKHOUSE_HOST" \
-  --user="$CLICKHOUSE_USERNAME" \
+  --user="$CLICKHOUSE_USER" \
   --password="$CLICKHOUSE_PASSWORD" \
   --query="
     INSERT INTO ${CLICKHOUSE_DATABASE}.otel_metrics_gauge_temp
@@ -175,7 +175,7 @@ echo "OK"
 echo -n "Inserting adjusted metrics into ${CLICKHOUSE_DATABASE}.otel_metrics_histogram_temp..."
 clickhouse client \
   --secure --host="$CLICKHOUSE_HOST" \
-  --user="$CLICKHOUSE_USERNAME" \
+  --user="$CLICKHOUSE_USER" \
   --password="$CLICKHOUSE_PASSWORD" \
   --query="
     INSERT INTO ${CLICKHOUSE_DATABASE}.otel_metrics_histogram_temp WITH (
@@ -222,7 +222,7 @@ echo "OK"
 echo -n "Inserting adjusted metrics into ${CLICKHOUSE_DATABASE}.otel_metrics_sum_temp..."
 clickhouse client \
   --secure --host="$CLICKHOUSE_HOST" \
-  --user="$CLICKHOUSE_USERNAME" \
+  --user="$CLICKHOUSE_USER" \
   --password="$CLICKHOUSE_PASSWORD" \
   --query="
     INSERT INTO ${CLICKHOUSE_DATABASE}.otel_metrics_sum_temp WITH (
@@ -265,7 +265,7 @@ echo "OK"
 echo -n "Inserting adjusted metrics into ${CLICKHOUSE_DATABASE}.otel_metrics_summary_temp..."
 clickhouse client \
   --secure --host="$CLICKHOUSE_HOST" \
-  --user="$CLICKHOUSE_USERNAME" \
+  --user="$CLICKHOUSE_USER" \
   --password="$CLICKHOUSE_PASSWORD" \
   --query="
     INSERT INTO ${CLICKHOUSE_DATABASE}.otel_metrics_summary_temp WITH (
@@ -304,7 +304,7 @@ echo "OK"
 echo -n "Inserting adjusted metrics into ${CLICKHOUSE_DATABASE}.otel_metrics_exponential_histogram_temp..."
 clickhouse client \
   --secure --host="$CLICKHOUSE_HOST" \
-  --user="$CLICKHOUSE_USERNAME" \
+  --user="$CLICKHOUSE_USER" \
   --password="$CLICKHOUSE_PASSWORD" \
   --query="
     INSERT INTO ${CLICKHOUSE_DATABASE}.otel_metrics_exponential_histogram_temp WITH (
@@ -355,7 +355,7 @@ echo "OK"
 echo -n "Inserting adjusted metrics into ${CLICKHOUSE_DATABASE}.hyperdx_sessions_temp..."
 clickhouse client \
   --secure --host="$CLICKHOUSE_HOST" \
-  --user="$CLICKHOUSE_USERNAME" \
+  --user="$CLICKHOUSE_USER" \
   --password="$CLICKHOUSE_PASSWORD" \
   --query="
     INSERT INTO ${CLICKHOUSE_DATABASE}.hyperdx_sessions_temp
@@ -393,7 +393,7 @@ for table in "${tables[@]}"; do
   echo "Exchanging tables ${CLICKHOUSE_DATABASE}.${table} AND ${CLICKHOUSE_DATABASE}.${table}_temp"
   clickhouse client \
     --secure --host="$CLICKHOUSE_HOST" \
-    --user="$CLICKHOUSE_USERNAME" \
+    --user="$CLICKHOUSE_USER" \
     --password="$CLICKHOUSE_PASSWORD" \
     --query="EXCHANGE TABLES ${CLICKHOUSE_DATABASE}.${table} AND ${CLICKHOUSE_DATABASE}.${table}_temp"
 done
@@ -404,7 +404,7 @@ for table in "${tables[@]}"; do
   echo "Truncating table ${CLICKHOUSE_DATABASE}.${table}_temp"
   clickhouse client \
     --secure --host="$CLICKHOUSE_HOST" \
-    --user="$CLICKHOUSE_USERNAME" \
+    --user="$CLICKHOUSE_USER" \
     --password="$CLICKHOUSE_PASSWORD" \
     --query="TRUNCATE ${CLICKHOUSE_DATABASE}.${table}_temp"
 done
