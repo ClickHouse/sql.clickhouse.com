@@ -6,15 +6,32 @@ CLICKHOUSE_PASSWORD="${CLICKHOUSE_PASSWORD}"
 CLICKHOUSE_DATABASE="${CLICKHOUSE_DATABASE:-otel_v2_temp}"
 CLICKHOUSE_HOST="sql-clickhouse.clickhouse.com"
 HOURS="${HOURS:-29}"
+MAX_RETRIES=5
+SLEEP_TIME=1  
 
-# Get start time (optional step from earlier)
-START_TIME=$(clickhouse client \
-  --secure --host="$CLICKHOUSE_HOST" \
-  --user="$CLICKHOUSE_USER" \
-  --password="$CLICKHOUSE_PASSWORD" \
-  --query="SELECT subtractHours(now(), $HOURS) AS start FORMAT TabSeparated" 2>/dev/null)
+for ((i=1; i<=MAX_RETRIES; i++)); do
 
-echo "Start time: $START_TIME"
+  START_TIME=$(clickhouse client \
+    --secure --host="$CLICKHOUSE_HOST" \
+    --user="$CLICKHOUSE_USER" \
+    --password="$CLICKHOUSE_PASSWORD" \
+    --query="SELECT subtractHours(now(), $HOURS) AS start FORMAT TabSeparated" 2>/dev/null)
+
+  if [[ $? -eq 0 && -n "$START_TIME" ]]; then
+    echo "Start time: $START_TIME"
+    break
+  else
+    echo "Attempt $i failed. Retrying in $SLEEP_TIME seconds..."
+    sleep $SLEEP_TIME
+    SLEEP_TIME=$((SLEEP_TIME * 2))  # Exponential backoff
+  fi
+
+  # If this was the last attempt and still failed
+  if [[ $i -eq $MAX_RETRIES ]]; then
+    echo "ERROR: Failed to retrieve start time after $MAX_RETRIES attempts."
+    exit 1
+  fi
+done
 
 # Create database if it doesn't exist
 clickhouse client \
