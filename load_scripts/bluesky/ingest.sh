@@ -46,7 +46,7 @@ while $has_more; do
             if gsutil cp "${last_value}.csv.gz" ${BUCKET_PATH}; then
                 rm "${last_value}.csv.gz" "${last_value}.json"
                 echo "Processed $COUNT messages"
-                has_more=true
+                # has_more=true
             else
                 echo "Error: gsutil upload failed for ${last_value}.csv.gz"
             fi
