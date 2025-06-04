@@ -23,7 +23,10 @@ while $has_more; do
     echo "Extracted timestamp: $cursor"
 
     # Connect to WebSocket and process messages
-    websocat -Un -B 196605 --max-messages-rev $MAX_MESSAGES "$WS_URL/subscribe?wantedCollections=app.*&cursor=$cursor" > "$OUTPUT_FILE"
+    timeout 3m websocat -Un -B 196605 --max-messages-rev $MAX_MESSAGES "$WS_URL/subscribe?wantedCollections=app.*&cursor=$cursor" > "$OUTPUT_FILE"
+    if [ $? -eq 124 ]; then
+        echo "WebSocket connection timed out"
+    fi
     COUNT=$(wc -l < "$OUTPUT_FILE")
     echo "Received $COUNT messages"
     has_more=false
