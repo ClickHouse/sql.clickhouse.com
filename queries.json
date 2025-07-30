@@ -404,19 +404,6 @@
       "slug": "percentage-new-cases-change-per-day"
     },
     {
-      "id": "HQXNQZE26Z1QWYP9KC76ML",
-      "name": "Most common ingredients",
-      "group": "food",
-      "comment": "Extracts and ranks named entities by frequency from recipe database",
-      "query": "SELECT\n    arrayJoin(NER) AS k,\n    count() AS c\nFROM food.recipes\nGROUP BY k\nORDER BY c DESC\nLIMIT 50",
-      "chart": {
-        "type": "line"
-      },
-      "format": false,
-      "params": [],
-      "slug": "most-common-ingredients"
-    },
-    {
       "id": "1MXMHASDLEQIP4P1D1STND",
       "name": "Usage per machine",
       "group": "mgbench",
@@ -1078,19 +1065,6 @@
       "format": false,
       "params": [],
       "slug": "line-by-line-commit-history-of-a-file"
-    },
-    {
-      "id": "KB5KQJJFNBKHE5GBUJCP1B",
-      "name": "Menu with caviar",
-      "group": "food",
-      "comment": "Analyzes menu data from various years, filtering for items containing caviar and displaying trends in average prices using a line chart.",
-      "query": "SELECT\n    round(toUInt32OrZero(extract(menu_date, '^\\\\d{4}')), -1) AS d,\n    count(),\n    round(avg(price), 2),\n    bar(avg(price), 0, 50, 100),\n    any(dish_name)\nFROM food.menu_item_denorm\nWHERE (menu_currency IN ('Dollars', '')) AND (d > 0) AND (d < 2022) AND (dish_name ILIKE '%caviar%')\nGROUP BY d\nORDER BY d ASC",
-      "chart": {
-        "type": "line"
-      },
-      "format": false,
-      "params": [],
-      "slug": "menu-with-caviar"
     },
     {
       "id": "KBGB8WAATJ1TEZSHUTF197",
