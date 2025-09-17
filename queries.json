@@ -3643,6 +3643,114 @@
       },
       "format": false,
       "params": []
+    },
+    {
+      "id": "CFCYFR95WSJAIMPDWK75CU",
+      "name": "Dynamic column selection - example 1",
+      "group": "docs",
+      "comment": "Use the COLUMNS expression with a regular expression",
+      "query": "SELECT COLUMNS('.*_amount')\nFROM nyc_taxi.trips\nLIMIT 10;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
+    },
+    {
+      "id": "S236AA3RSMN2NVT2F8XQVB",
+      "name": "Dynamic column selection - example 2",
+      "group": "docs",
+      "comment": "Return columns that contain the terms fee or tax",
+      "query": "SELECT COLUMNS('.*_amount|fee|tax')\nFROM nyc_taxi.trips\nORDER BY rand() \nLIMIT 3;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
+    },
+    {
+      "id": "6DG7BHG4PEVI9AFYWC745M",
+      "name": "Dynamic column selection - example 3",
+      "group": "docs",
+      "comment": "Combine multiple column patterns in a single query",
+      "query": "SELECT \n    COLUMNS('.*_amount'),\n    COLUMNS('.*_date.*')\nFROM nyc_taxi.trips\nLIMIT 5;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
+    },
+    {
+      "id": "BX8PGPXYHXLCNMQNGKEJAD",
+      "name": "Dynamic column selection - example 4",
+      "group": "docs",
+      "comment": "Use the APPLY modifier to apply functions across every column",
+      "query": "SELECT COLUMNS('.*_amount|fee|tax') APPLY(max)\nFROM nyc_taxi.trips;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
+    },
+    {
+      "id": "GGFIX3T73VQQGZXBVVDF84",
+      "name": "Dynamic column selection - example 5",
+      "group": "docs",
+      "comment": "Use the APPLY modifier to apply functions across every column",
+      "query": "SELECT COLUMNS('.*_amount|fee|tax') APPLY(avg)\nFROM nyc_taxi.trips;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
+    },
+    {
+      "id": "JRC2MCTZRNNVYPJCYAQ86U",
+      "name": "Dynamic column selection - example 6",
+      "group": "docs",
+      "comment": "Use the APPLY modifier for chaining functions",
+      "query": "SELECT COLUMNS('.*_amount|fee|tax') APPLY(avg) APPLY(round)\nFROM nyc_taxi.trips;",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
+    },
+    {
+      "id": "3VLDDX7XPRTSEKKG8EWMDD",
+      "name": "Dynamic column selection - example 7",
+      "group": "docs",
+      "comment": "Use the APPLY modifier with a lambda",
+      "query": "SELECT COLUMNS('.*_amount|fee|tax') APPLY avg APPLY x -> round(x, 2)\nFROM nyc_taxi.trips",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
+    },
+    {
+      "id": "HVQQYPXT8WUS9LWDXCBEAD",
+      "name": "Dynamic column selection - example 8",
+      "group": "docs",
+      "comment": "Use the REPLACE modifier to replace a column while leaving the other ones as they are. E.g to double the total amount and divide the MTA tax by 1.1",
+      "query": "FROM nyc_taxi.trips \nSELECT \n  COLUMNS('.*_amount|fee|tax')\n  REPLACE(\n    total_amount*2 AS total_amount,\n    mta_tax/1.1 AS mta_tax\n  ) \n  APPLY(avg)\n  APPLY(col -> round(col, 2));",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
+    },
+    {
+      "id": "RX8USL5EDT1KNYDQWDBGXJ",
+      "name": "Dynamic column selection - example 9",
+      "group": "docs",
+      "comment": "Exclude a field using EXCEPT",
+      "query": "FROM nyc_taxi.trips \nSELECT \n  COLUMNS('.*_amount|fee|tax') EXCEPT(tolls_amount)\n  REPLACE(\n    total_amount*2 AS total_amount,\n    mta_tax/1.1 AS mta_tax\n  ) \n  APPLY(avg)\n  APPLY(col -> round(col, 2));",
+      "chart": {
+        "type": "line"
+      },
+      "format": false,
+      "params": []
     }
   ]
 }
