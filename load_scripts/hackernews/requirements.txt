@@ -1,0 +1,2 @@
+aiohttp>=3.9.0
+clickhouse-driver>=0.2.6
