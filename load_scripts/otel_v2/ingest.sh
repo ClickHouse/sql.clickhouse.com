@@ -404,8 +404,57 @@ clickhouse client \
 
 echo "OK"
 
+# Refill MVs
+# Insert aggregated data into otel_traces_1m
+echo -n "Refilling MV ${CLICKHOUSE_DATABASE}.otel_traces_1m..."
+clickhouse client \
+  --secure --host="$CLICKHOUSE_HOST" \
+  --user="$CLICKHOUSE_USER" \
+  --password="$CLICKHOUSE_PASSWORD" \
+  --query="
+    INSERT INTO ${CLICKHOUSE_DATABASE}.otel_traces_1m_temp SELECT
+        toStartOfMinute(Timestamp) AS Timestamp,
+        ServiceName,
+        StatusCode,
+        count() AS count,
+        avgState(Duration) AS avg__Duration,
+        maxSimpleState(Duration) AS max__Duration
+    FROM ${CLICKHOUSE_DATABASE}.otel_traces_temp
+    GROUP BY
+        Timestamp,
+        ServiceName,
+        StatusCode"
 
-# Create each table from otel_v2_source
+echo "OK"
+
+
+# Insert aggregated data into otel_traces_1m_v2
+echo -n "Refilling MV ${CLICKHOUSE_DATABASE}.otel_traces_1m_v2..."
+clickhouse client \
+  --secure --host="$CLICKHOUSE_HOST" \
+  --user="$CLICKHOUSE_USER" \
+  --password="$CLICKHOUSE_PASSWORD" \
+  --query="
+    INSERT INTO ${CLICKHOUSE_DATABASE}.otel_traces_1m_v2_temp SELECT
+        toStartOfMinute(Timestamp) AS Timestamp,
+        ServiceName,
+        SpanName,
+        StatusCode,
+        count() AS count,
+        avgState(Duration) AS avg__Duration,
+        maxSimpleState(Duration) AS max__Duration,
+        quantileTDigestState(0.5)(Duration) AS quantile__Duration
+    FROM ${CLICKHOUSE_DATABASE}.otel_traces_temp
+    GROUP BY
+        Timestamp,
+        ServiceName,
+        StatusCode,
+        SpanName"
+
+echo "OK"
+
+
+# exchange tables
 for table in "${tables[@]}"; do
   echo "Exchanging tables ${CLICKHOUSE_DATABASE}.${table} AND ${CLICKHOUSE_DATABASE}.${table}_temp"
   clickhouse client \
@@ -415,8 +464,22 @@ for table in "${tables[@]}"; do
     --query="EXCHANGE TABLES ${CLICKHOUSE_DATABASE}.${table} AND ${CLICKHOUSE_DATABASE}.${table}_temp"
 done
 
+echo "Exchanging tables ${CLICKHOUSE_DATABASE}.otel_traces_1m AND ${CLICKHOUSE_DATABASE}.otel_traces_1m_temp"
+clickhouse client \
+  --secure --host="$CLICKHOUSE_HOST" \
+  --user="$CLICKHOUSE_USER" \
+  --password="$CLICKHOUSE_PASSWORD" \
+  --query="EXCHANGE TABLES ${CLICKHOUSE_DATABASE}.otel_traces_1m AND ${CLICKHOUSE_DATABASE}.otel_traces_1m_temp"
 
-# Create each table from otel_v2_source
+clickhouse client \
+  --secure --host="$CLICKHOUSE_HOST" \
+  --user="$CLICKHOUSE_USER" \
+  --password="$CLICKHOUSE_PASSWORD" \
+  --query="EXCHANGE TABLES ${CLICKHOUSE_DATABASE}.otel_traces_1m_v2 AND ${CLICKHOUSE_DATABASE}.otel_traces_1m_v2_temp"
+echo "OK"
+
+
+# truncate temp tables
 for table in "${tables[@]}"; do
   echo "Truncating table ${CLICKHOUSE_DATABASE}.${table}_temp"
   clickhouse client \
@@ -426,4 +489,18 @@ for table in "${tables[@]}"; do
     --query="TRUNCATE ${CLICKHOUSE_DATABASE}.${table}_temp"
 done
 
+# truncate temp tables
+echo "Truncating table ${CLICKHOUSE_DATABASE}.otel_traces_1m_temp"
+clickhouse client \
+  --secure --host="$CLICKHOUSE_HOST" \
+  --user="$CLICKHOUSE_USER" \
+  --password="$CLICKHOUSE_PASSWORD" \
+  --query="TRUNCATE ${CLICKHOUSE_DATABASE}.otel_traces_1m_temp"
+
+echo "Truncating table ${CLICKHOUSE_DATABASE}.otel_traces_1m_v2_temp"
+clickhouse client \
+  --secure --host="$CLICKHOUSE_HOST" \
+  --user="$CLICKHOUSE_USER" \
+  --password="$CLICKHOUSE_PASSWORD" \
+  --query="TRUNCATE ${CLICKHOUSE_DATABASE}.otel_traces_1m_v2_temp"
 echo "Done"
